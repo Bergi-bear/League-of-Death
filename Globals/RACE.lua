@@ -1,7 +1,7 @@
 RACE = {
 	-- 1: ork
 	{
-		name  = "Орк",
+		name  = "Орда",
 		model = "UI\\Glues\\Singleplayer\\Orccampaign3d\\orccampaign3d.mdx",
 		attr  = {
 			-- 1: str

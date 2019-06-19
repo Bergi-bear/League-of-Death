@@ -7,7 +7,7 @@ TimerStart(
 			---@type function
 			local Update
 			
-			--> CINEMATIC
+			--> Cinematic
 			ShowInterface(false, 0)
 			BlzEnableCursor(true)
 			EnableUserControl(true)
@@ -23,29 +23,34 @@ TimerStart(
 			DisplayCineFilter(true)
 			
 			-- GameUI
-			local GameUI = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
-			---@type framehandle
-			local DEBUG
+			local GameUI         = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
+			local DEBUG---@type framehandle
 			
 			--> Wrap
-			local Wrap   = BlzCreateFrameByType('FRAME', '', GameUI, '', 0)
+			local WrapPaddingTop = -0.036
+			local Wrap           = BlzCreateFrameByType('FRAME', '', GameUI, '', 0)
 			BlzFrameSetSize(Wrap, 1, 1)
 			BlzFrameSetPoint(Wrap, FRAMEPOINT_CENTER, GameUI, FRAMEPOINT_CENTER, 0, 0)
 			
+			--> Model
+			local ModelWrap = BlzCreateFrameByType('MENU', '', Wrap, 'StandardPopupMenuMenuTemplate', 0)
+			BlzFrameSetSize(ModelWrap, 1, 1)
+			BlzFrameSetPoint(ModelWrap, FRAMEPOINT_CENTER, Wrap, FRAMEPOINT_CENTER, 0.0, 0.0)
+			local Model = BlzCreateFrameByType('SPRITE', '', ModelWrap, 'StandardFrameTemplate', 0)
+			BlzFrameSetPoint(Model, FRAMEPOINT_CENTER, ModelWrap, FRAMEPOINT_CENTER, 0.0, 0.0)
+			
+			
 			--> Race
-			--local WrapHeight    = 0.576
 			local WrapHeight    = 0.338
 			local RaceWrapWidth = 0.193
-			local RaceWrap      = BlzCreateFrame('ScriptDialog', Wrap, 0, 0)
+			local RaceWrap      = BlzCreateFrame('EscMenuBackdrop', Wrap, 0, 0)
 			BlzFrameSetSize(RaceWrap, RaceWrapWidth, WrapHeight)
 			BlzFrameSetPoint(RaceWrap, FRAMEPOINT_LEFT, Wrap, FRAMEPOINT_LEFT, 0, 0)
-			local RaceWrapText = BlzGetFrameByName('ScriptDialogText', 0)
-			BlzFrameSetText(RaceWrapText, 'Раса')
 			
 			--> RaceBtn
 			local BtnHeight = 0.03
 			local BtnTop    = -0.012
-			local BtnBottom = 0.036
+			local BtnBottom = 0.038
 			local RaceBtn   = {}
 			
 			for i = 1, #RACE do
@@ -53,7 +58,7 @@ TimerStart(
 				BlzFrameSetText(RaceBtn[i], RACE[i].name)
 				BlzFrameSetSize(RaceBtn[i], 0.128, BtnHeight)
 				if i == 1 then
-					BlzFrameSetPoint(RaceBtn[i], FRAMEPOINT_TOP, RaceWrapText, FRAMEPOINT_BOTTOM, 0, BtnTop)
+					BlzFrameSetPoint(RaceBtn[i], FRAMEPOINT_TOP, RaceWrap, FRAMEPOINT_TOP, 0, WrapPaddingTop)
 				elseif i == #RACE then
 					BlzFrameSetPoint(RaceBtn[i], FRAMEPOINT_BOTTOM, RaceWrap, FRAMEPOINT_BOTTOM, 0, BtnBottom)
 				else
@@ -78,14 +83,11 @@ TimerStart(
 				)
 			end
 			
-			
 			--> Attr
 			local AttrWrapWidth = 1 - RaceWrapWidth
-			local AttrWrap      = BlzCreateFrame('ScriptDialog', Wrap, 0, 0)
+			local AttrWrap      = BlzCreateFrame('EscMenuBackdrop', Wrap, 0, 0)
 			BlzFrameSetSize(AttrWrap, AttrWrapWidth, WrapHeight)
 			BlzFrameSetPoint(AttrWrap, FRAMEPOINT_LEFT, RaceWrap, FRAMEPOINT_RIGHT, 0.0315, 0)
-			local AttrWrapText = BlzGetFrameByName('ScriptDialogText', 0)
-			BlzFrameSetText(AttrWrapText, 'Клас')
 			
 			---@type function
 			local AttrBtnOnClick = function(frame, index)
@@ -106,7 +108,7 @@ TimerStart(
 			AttrBtn[2]           = BlzCreateFrame('ScriptDialogButton', AttrWrap, 0, 0)
 			BlzFrameSetText(AttrBtn[2], 'Ловкость')
 			BlzFrameSetSize(AttrBtn[2], AttrBtnWidth, BtnHeight)
-			BlzFrameSetPoint(AttrBtn[2], FRAMEPOINT_TOP, AttrWrapText, FRAMEPOINT_BOTTOM, 0, BtnTop)
+			BlzFrameSetPoint(AttrBtn[2], FRAMEPOINT_TOP, AttrWrap, FRAMEPOINT_TOP, 0, WrapPaddingTop)
 			AttrBtnOnClick(AttrBtn[2], 2)
 			
 			AttrBtn[1] = BlzCreateFrame('ScriptDialogButton', AttrWrap, 0, 0)
@@ -186,7 +188,7 @@ TimerStart(
 				AbilBtn[i] = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 				BlzFrameSetSize(AbilBtn[i], 0.05, 0.05)
 				if i == 1 then
-					BlzFrameSetPoint(AbilBtn[i], FRAMEPOINT_TOPLEFT, TipTextWrap, FRAMEPOINT_BOTTOMLEFT, 0, 0)
+					BlzFrameSetPoint(AbilBtn[i], FRAMEPOINT_TOPLEFT, TipTextWrap, FRAMEPOINT_BOTTOMLEFT, 0, -0.01)
 				else
 					BlzFrameSetPoint(AbilBtn[i], FRAMEPOINT_LEFT, AbilBtn[i - 1], FRAMEPOINT_RIGHT, 0.0074, 0)
 				end
@@ -196,7 +198,6 @@ TimerStart(
 				BlzTriggerRegisterFrameEvent(AbilityBtnOnLeaveTrigger, AbilBtn[i], FRAMEEVENT_MOUSE_LEAVE)
 				AbilBtnOnEnter(i)
 			end
-			
 			
 			--> StartBtn
 			local StartBtn = BlzCreateFrame('ScriptDialogButton', AttrWrap, 0, 0)
@@ -253,33 +254,35 @@ TimerStart(
 				
 				local abilitys = RACE[race].attr[attr].ability
 				for i = 1, 6 do
-					BlzFrameSetVisible(AbilBtn[i], i <= #abilitys)
-					if (i <= #abilitys) then
-					
+					if player == GetLocalPlayer() then
+						BlzFrameSetVisible(AbilBtn[i], i <= #abilitys)
+						if (i <= #abilitys) then
+							BlzFrameSetTexture(AbilBtnTexture[i], RACE[race].attr[attr].ability[i].icon, 0, true)
+						end
+					end
+				end
+				
+				if RACE[race].model ~= PLAYER[id].heroSelectBgModel then
+					PLAYER[id].heroSelectBgModel = RACE[race].model
+					if (player == GetLocalPlayer()) then
+						BlzFrameSetModel(Model, PLAYER[id].heroSelectBgModel, 0)
 					end
 				end
 				
 				if (player == GetLocalPlayer()) then
-					if RACE[race].model ~= MODEL_NAME then
-						MODEL_NAME = RACE[race].model
-						BlzFrameSetModel(Model, MODEL_NAME, 0)
-					end
 					BlzFrameSetTexture(PortraitTexture, 'UI\\Hero\\Previev\\' .. race .. '_' .. attr .. '.blp', 0, true)
 					SetTipText(player, '')
-				
 				end
 			end
 			
 			Update(GetLocalPlayer())
 			
-			
 			--{ TEST
-			local V      = 0.06
+			local V      = 0.01
 			---@type function
 			local change = function(add)
 				V = V + add
 				BlzFrameSetText(DEBUG, V)
-				BlzFrameSetPoint(StartBtn, FRAMEPOINT_BOTTOMLEFT, AttrWrap, FRAMEPOINT_BOTTOMLEFT, 0.032, V)
 			end
 			--} TEST
 			
