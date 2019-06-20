@@ -1,4 +1,4 @@
-ABILITY = {
+ABILITY   = {
 	-- 1:ork
 	ork   = {
 		name        = 'Сила орка',

@@ -1,10 +1,10 @@
-PLAYER = {} ---@type table
+PLAYER = {}
 
 for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
 	PLAYER[i] = {
-		hero            = nil,
+		hero              = nil,
 		heroSelectBgModel = '',
-		race            = math.random(1, #RACE - 1),
-		attr            = math.random(1, 3)
+		race              = math.random(1, #RACE - 1),
+		attr              = math.random(1, 3)
 	}
 end

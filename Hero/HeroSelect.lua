@@ -33,12 +33,11 @@ TimerStart(
 			BlzFrameSetPoint(Wrap, FRAMEPOINT_CENTER, GameUI, FRAMEPOINT_CENTER, 0, 0)
 			
 			--> Model
-			local ModelWrap = BlzCreateFrameByType('MENU', '', Wrap, 'StandardPopupMenuMenuTemplate', 0)
+			local ModelWrap = BlzCreateFrameByType('MENU', '', Wrap, '', 0)
 			BlzFrameSetSize(ModelWrap, 1, 1)
-			BlzFrameSetPoint(ModelWrap, FRAMEPOINT_CENTER, Wrap, FRAMEPOINT_CENTER, 0.0, 0.0)
-			local Model = BlzCreateFrameByType('SPRITE', '', ModelWrap, 'StandardFrameTemplate', 0)
-			BlzFrameSetPoint(Model, FRAMEPOINT_CENTER, ModelWrap, FRAMEPOINT_CENTER, 0.0, 0.0)
-			
+			BlzFrameSetPoint(ModelWrap, FRAMEPOINT_CENTER, Wrap, FRAMEPOINT_CENTER, 0, 0)
+			local Model = BlzCreateFrameByType('SPRITE', '', ModelWrap, '', 0)
+			BlzFrameSetPoint(Model, FRAMEPOINT_CENTER, ModelWrap, FRAMEPOINT_CENTER, 0, 0)
 			
 			--> Race
 			local WrapHeight    = 0.338
