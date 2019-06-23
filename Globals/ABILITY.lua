@@ -3,7 +3,7 @@ ABILITY   = {
 	ork   = {
 		name        = 'Сила орка',
 		id          = FourCC('0000'),
-		icon        = 'ReplaceableTextures\\CommandButtons\\BTNGrunt.blp',
+		icon        = 'ReplaceableTextures\\CommandButtons\\BTNAbility1.blp',
 		description = 'Повышает характеристики орка',
 	},
 	-- 1:ork 1:str

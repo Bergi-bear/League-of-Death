@@ -9,11 +9,6 @@ RACE = {
 				description = "Орк - cила",
 				unit        = FourCC("O000"),
 				ability     = {
-					ABILITY.smash,
-					ABILITY.jump,
-					ABILITY.helix,
-					ABILITY.swipe,
-					ABILITY.rage,
 					ABILITY.ork
 				}
 			},
