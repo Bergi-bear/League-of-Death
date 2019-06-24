@@ -1,4 +1,4 @@
-function HeroSelectInit()
+function HeroPickInit()
 	---@type function
 	local Update
 	
@@ -17,7 +17,7 @@ function HeroSelectInit()
 	SetCineFilterDuration(0)
 	DisplayCineFilter(true)
 	
-	-- GameUI
+	--> GameUI
 	local GameUI         = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	
 	--> Wrap
@@ -268,5 +268,5 @@ function HeroSelectInit()
 	
 	Update(GetLocalPlayer())
 	
-	--Start(GetLocalPlayer())
+	Start(GetLocalPlayer())
 end

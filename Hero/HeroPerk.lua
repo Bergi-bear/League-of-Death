@@ -1,43 +1,57 @@
 function HeroPerkInit()
-	local DEBUG---@type framehandle
+	--> GameUI
+	local GameUI      = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
+	local UberTooltip = BlzGetOriginFrame(ORIGIN_FRAME_UBERTOOLTIP, 0)
 	
-	--[[
-	local framehandle mainbutton = BlzCreateFrame("ScoreScreenBottomButtonTemplate", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI,0), 0,  0)
-	local framehandle imgFrame = BlzGetFrameByName("ScoreScreenButtonBackdrop",  0)
-	local framehandle tooltipBox = BlzCreateFrame("ListBoxWar3", mainbutton, 0,  0)
-	local framehandle tooltip = BlzCreateFrameByType("TEXT", "StandardInfoTextTemplate", tooltipBox, "StandardInfoTextTemplate",  0)
+	--> Btn
+	local BtnIcon     = { 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendUnBurrow.blp', 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendBurrow.blp' }
+	local Btn         = BlzCreateFrame('ScoreScreenBottomButtonTemplate', GameUI, 0, 0)
+	BlzFrameSetSize(Btn, 0.04, 0.04)
+	BlzFrameSetPoint(Btn, FRAMEPOINT_BOTTOMLEFT, GameUI, FRAMEPOINT_BOTTOMLEFT, 0, 0.18)
+	local BtnTexture = BlzGetFrameByName('ScoreScreenButtonBackdrop', 0)
+	BlzFrameSetTexture(BtnTexture, BtnIcon[1], 0, true)
 	
-	call BlzFrameSetSize(mainbutton, 0.04, 0.04)
+	local BtnTextWrap = BlzCreateFrame('TimerDialog', Btn, 0, 0)
+	BlzFrameSetSize(BtnTextWrap, 0.03, 0.023)
+	BlzFrameSetPoint(BtnTextWrap, FRAMEPOINT_BOTTOM, Btn, FRAMEPOINT_TOP, 0, -0.005)
+	BlzFrameSetVisible(BlzGetFrameByName('TimerDialogValue', 0), false)
+	local BtnText = BlzGetFrameByName('TimerDialogTitle', 0)
+	BlzFrameClearAllPoints(BtnText)
+	BlzFrameSetPoint(BtnText, FRAMEPOINT_CENTER, BtnTextWrap, FRAMEPOINT_CENTER, 0, 0)
+	BlzFrameSetText(BtnText, '12')
+	print(BlzFrameGetHeight(BtnText))
+	BlzFrameSetText(BtnText, '12\n12\n12\n12\n12\n12\n12\n12\n12\n')
+	print(BlzFrameGetHeight(BtnText))
 	
-	call BlzFrameSetSize(tooltipBox, 0.3, 0.1)
-	call BlzFrameSetSize(tooltip, 0.28, 0.08)//tooltip-Text is smaller than the box, so it wont touch the border.
-
-call BlzFrameSetTexture(imgFrame, "ReplaceableTextures\\CommandButtons\\BTNPeasant.blp", 0, true) //set the image of the imgFrame, with 0 the texture is streched with 1 the frame is filled with that texture.
-
-call BlzFrameSetAbsPoint(mainbutton, FRAMEPOINT_TOPLEFT, 0.4, 0.3) //positionate button on the screen
-	
-	
-	call BlzFrameSetPoint(tooltip, FRAMEPOINT_CENTER, tooltipBox, FRAMEPOINT_CENTER, 0.0, 0.0) //place tooltip into tooltipBox
-	call BlzFrameSetPoint(tooltipBox, FRAMEPOINT_BOTTOM, mainbutton, FRAMEPOINT_TOP, 0.0, 0.0) //place tooltipBox with its bottom to the mainButtons TOP. tooltipBox will be over the mainbutton
-	
-	call BlzFrameSetTooltip(mainbutton, tooltipBox) //show tooltipBox only when mainbutton is hovered with the mouse.
-call BlzFrameSetText(tooltip, "Sound\\Music\\mp3Music\\Credits.mp3|nSound\\Music\\mp3Music\\PH.mp3|n|cffffcc00Sound\\Music\\mp3Music\\War2IntroMusic.mp3") //text of the tooltip
-]]
+	local BtnTrigger = CreateTrigger()
+	BlzTriggerRegisterFrameEvent(BtnTrigger, Btn, FRAMEEVENT_CONTROL_CLICK)
+	BlzTriggerRegisterFrameEvent(BtnTrigger, Btn, FRAMEEVENT_MOUSE_ENTER)
+	BlzTriggerRegisterFrameEvent(BtnTrigger, Btn, FRAMEEVENT_MOUSE_LEAVE)
+	TriggerAddAction(BtnTrigger, function()
+		if BlzGetTriggerFrameEvent() == FRAMEEVENT_CONTROL_CLICK then
+		
+		elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_ENTER then
+			
+			BlzFrameSetVisible(UberTooltip, true)
+			BlzFrameSetText(BlzGetOriginFrame(ORIGIN_FRAME_UBERTOOLTIP, 0), 'my text')
+		elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_LEAVE then
+			BlzFrameSetVisible(UberTooltip, false)
+		end
+	end)
 	
 	
 	--{ TEST
-	local V      = 0.01
+	local V          = 0.1
 	---@type function
-	local change = function(add)
+	local change     = function(add)
 		V = V + add
-		BlzFrameSetText(DEBUG, V)
+		ClearTextMessages()
+		print(V)
+	
 	end
 	--} TEST
 	
 	--{ DEBUG
-	DEBUG        = BlzCreateFrameByType('TEXT', '', RaceWrap, '', 0)
-	BlzFrameSetSize(DEBUG, 0.555, 0.02)
-	BlzFrameSetPoint(DEBUG, FRAMEPOINT_BOTTOMLEFT, RaceWrap, FRAMEPOINT_BOTTOMLEFT, 0, 0)
 	local OnKeyArrow = function(event, count)
 		local OnKeyArrowTrigger = CreateTrigger()
 		for i = 0, GetBJMaxPlayers() - 1 do
