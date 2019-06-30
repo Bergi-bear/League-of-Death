@@ -126,7 +126,6 @@ function HeroPickInit()
 	BlzFrameSetPoint(PortraitTextureWrap, FRAMEPOINT_CENTER, PortraitWrap, FRAMEPOINT_CENTER, 0, 0)
 	local PortraitTexture = BlzGetFrameByName('ListBoxBackdrop', 0)
 	
-	
 	--> TipText
 	local TipTextWrap     = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 	BlzFrameSetSize(TipTextWrap, 0.336, PortraitSize)
@@ -172,11 +171,8 @@ function HeroPickInit()
 		)
 	end
 	
-	CinematicModeBJ()
-	
 	local AbilEmptyTextFile = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp'
 	for i = 1, 6 do
-		
 		AbilBtn[i] = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 		BlzFrameSetSize(AbilBtn[i], 0.05, 0.05)
 		if i == 1 then
@@ -197,14 +193,27 @@ function HeroPickInit()
 	BlzFrameSetSize(StartBtn, PortraitSize, BtnHeight)
 	BlzFrameSetPoint(StartBtn, FRAMEPOINT_BOTTOMLEFT, AttrWrap, FRAMEPOINT_BOTTOMLEFT, 0.032, BtnBottom)
 	
+	--> StartFunction
 	---@param player player
 	local function Start(player)
-		local id = GetPlayerId(player)
-		local x  = GetStartLocationX(id)
-		local y  = GetStartLocationY(id)
+		local id   = GetPlayerId(player)
+		local x    = GetStartLocationX(id)
+		local y    = GetStartLocationY(id)
+		
+		local data = RACE[PLAYER[id].race].attr[PLAYER[id].attr]
 		
 		if PLAYER[id].hero ~= nil then return end
-		PLAYER[id].hero = CreateUnit(player, RACE[PLAYER[id].race].attr[PLAYER[id].attr].unit, x, y, 90)
+		PLAYER[id].hero    = CreateUnit(player, data.unit, x, y, 90)
+		PLAYER[id].ability = data.ability
+		
+		for i = 1, #PLAYER[id].ability do
+			PLAYER[id].perk[PLAYER[id].ability[i].codename] = {
+				{ 0, 0, 0 }, --> 1
+				{ 0, 0, 0 }, --> 2
+				{ 0, 0, 0 }, --> 3
+				{ 0 }, --> 4
+			}
+		end
 		
 		if player == GetLocalPlayer() then
 			BlzFrameSetVisible(Wrap, false)
@@ -219,6 +228,8 @@ function HeroPickInit()
 			SelectUnit(PLAYER[id].hero, true)
 			PanCameraTo(x, y)
 		end
+		
+		HeroPerkShow(player)
 	end
 	
 	local StartTrigger = CreateTrigger()
@@ -226,6 +237,7 @@ function HeroPickInit()
 	TriggerAddAction(StartTrigger, function() Start(GetTriggerPlayer()) end)
 	
 	--> Update
+	---@param player player
 	Update = function(player)
 		local id   = GetPlayerId(player)
 		
@@ -253,10 +265,10 @@ function HeroPickInit()
 			end
 		end
 		
-		if RACE[race].model ~= PLAYER[id].heroSelectBgModel then
-			PLAYER[id].heroSelectBgModel = RACE[race].model
+		if RACE[race].model ~= PLAYER[id].HeroPick_BgModel then
+			PLAYER[id].HeroPick_BgModel = RACE[race].model
 			if (player == GetLocalPlayer()) then
-				BlzFrameSetModel(Model, PLAYER[id].heroSelectBgModel, 0)
+				BlzFrameSetModel(Model, PLAYER[id].HeroPick_BgModel, 0)
 			end
 		end
 		
@@ -266,7 +278,12 @@ function HeroPickInit()
 		end
 	end
 	
-	Update(GetLocalPlayer())
-	--PLAYER[0].attr = 1
-	--Start(GetLocalPlayer())
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		Update(Player(i))
+	end
+	
+	--{ TODO: only for test
+	PLAYER[0].attr = 1
+	Start(GetLocalPlayer())
+	--}
 end
