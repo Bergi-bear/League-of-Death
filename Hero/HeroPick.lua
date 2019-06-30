@@ -267,6 +267,6 @@ function HeroPickInit()
 	end
 	
 	Update(GetLocalPlayer())
-	
-	Start(GetLocalPlayer())
+	--PLAYER[0].attr = 1
+	--Start(GetLocalPlayer())
 end

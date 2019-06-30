@@ -5,6 +5,7 @@ ABILITY   = {
 		id          = FourCC('0000'),
 		icon        = 'ReplaceableTextures\\CommandButtons\\BTNAbility1.blp',
 		description = 'Повышает характеристики орка',
+		getPerkLevel = function() end
 	},
 	-- 1:ork 1:str
 	smash = {

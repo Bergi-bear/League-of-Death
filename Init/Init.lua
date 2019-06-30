@@ -15,17 +15,29 @@ do
 				race              = math.random(1, #RACE - 1),
 				attr              = math.random(1, 3),
 				perkPoint         = 1,
-				perk              = {
+				perk              = {}
+			}
+			
+			for k = 1, 6 do
+				PLAYER[i].perk[k] = {
 					{ 0, 0, 0 }, --> 1
 					{ 0, 0, 0 }, --> 2
 					{ 0, 0, 0 }, --> 3
 					{ 0 }, --> 4
 				}
-			}
+			end
+		end
+		
+		---@param player player
+		---@param ability integer
+		---@param perk integer
+		---@return integer
+		function GetPlayerPerkLevel(player, ability, perk)
+			return PLAYER[GetPlayerId(player)][ability][perk]
 		end
 		
 		-- init
 		HeroPickInit()
-		HeroPerkInit()
+		--HeroPerkInit()
 	end
 end

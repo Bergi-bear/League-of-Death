@@ -54,12 +54,9 @@ function HeroPerkInit()
 	end
 	
 	--> PerkWrap
-	local PerkWrap   = BlzCreateFrame('ListBoxWar3', AbilWrap, 0, 0)
+	local PerkWrap = BlzCreateFrame('ListBoxWar3', AbilWrap, 0, 0)
 	BlzFrameSetSize(PerkWrap, 0.273, 0.184)
 	BlzFrameSetPoint(PerkWrap, FRAMEPOINT_TOPLEFT, AbilBtn[1], FRAMEPOINT_BOTTOMLEFT, 0.001, 0)
-	
-	
-	
 	
 	--{ TEST
 	local V          = 0.1
@@ -85,6 +82,20 @@ function HeroPerkInit()
 	OnKeyArrow(EVENT_PLAYER_ARROW_LEFT_DOWN, 0.01)
 	OnKeyArrow(EVENT_PLAYER_ARROW_RIGHT_DOWN, -0.01)
 	--} /DEBUG
-
+	
+	
+	
+	local t = CreateTrigger()
+	TriggerRegisterPlayerEvent(t, Player(0), EVENT_PLAYER_END_CINEMATIC)
+	TriggerAddAction(t, function()
+		print()
+		print()
+		print()
+		ClearTextMessages()
+		for i = 0, 11 do
+			print(BlzFrameIsVisible(BlzGetOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, i)))
+		end
+	
+	end)
 
 end
