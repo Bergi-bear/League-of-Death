@@ -5,6 +5,23 @@ function table.clone(org)
 	return { table.unpack(org) }
 end
 
+---@param frame framehandle
+---@param texFile string
+---@param player player
+function FrameSetTexture(frame, texFile, player)
+	if player == nil or player == GetLocalPlayer() then
+		BlzFrameSetTexture(frame, texFile, 0, true)
+	end
+end
+
+---@param frame framehandle
+---@param enabled boolean
+function FrameSetEnable(frame, enabled)
+	if player == nil or player == GetLocalPlayer() then
+		BlzFrameSetEnable(frame, enabled)
+	end
+end
+
 --> InitGlobals hook
 local InitGlobals_hook = InitGlobals
 function InitGlobals()
@@ -38,6 +55,35 @@ function InitGlobals()
 		if (PLAYER[id].perk[ability] == nil) then return -1 end
 		return PLAYER[id].perk[ability][level][num]
 	end
+	
+	---@param player player
+	---@return table
+	function GetPlayerAbilityPerkLevels(player, ability)
+		local id    = GetPlayerId(player)
+		local count = { [0] = 1, 0, 0, 0, 0 }
+		
+		local perk  = PLAYER[id].perk[ability]
+		
+		for level = 1, 3 do
+			for num = 1, 3 do
+				count[level] = count[level] + perk[level][num]
+			end
+		end
+		
+		for i = 1, 3 do
+			if GetPlayerAbilityPerkLevel(player, ability, 1, i) > 0
+					and
+					GetPlayerAbilityPerkLevel(player, ability, 2, i) > 0
+					and
+					GetPlayerAbilityPerkLevel(player, ability, 3, i) > 0
+			then
+				count[4] = 1
+			end
+		end
+		
+		return count
+	end
+	
 	
 	-- init
 	HeroPerkInit()

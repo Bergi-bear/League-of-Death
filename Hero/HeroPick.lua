@@ -1,6 +1,5 @@
 function HeroPickInit()
-	---@type function
-	local Update
+	local Update---@type function
 	
 	--> Cinematic
 	ShowInterface(false, 0)
