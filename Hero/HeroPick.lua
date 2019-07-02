@@ -1,7 +1,7 @@
 function HeroPickInit()
 	local Update---@type function
 	
-	--> Cinematic
+	-- Cinematic
 	ShowInterface(false, 0)
 	BlzEnableCursor(true)
 	EnableUserControl(true)
@@ -16,30 +16,30 @@ function HeroPickInit()
 	SetCineFilterDuration(0)
 	DisplayCineFilter(true)
 	
-	--> GameUI
+	-- GameUI
 	local GameUI         = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	
-	--> Wrap
+	-- Wrap
 	local WrapPaddingTop = -0.036
 	local Wrap           = BlzCreateFrameByType('FRAME', '', GameUI, '', 0)
 	BlzFrameSetSize(Wrap, 1, 1)
 	BlzFrameSetPoint(Wrap, FRAMEPOINT_CENTER, GameUI, FRAMEPOINT_CENTER, 0, 0)
 	
-	--> Model
+	-- Model
 	local ModelWrap = BlzCreateFrameByType('MENU', '', Wrap, '', 0)
 	BlzFrameSetSize(ModelWrap, 1, 1)
 	BlzFrameSetPoint(ModelWrap, FRAMEPOINT_CENTER, Wrap, FRAMEPOINT_CENTER, 0, 0)
 	local Model = BlzCreateFrameByType('SPRITE', '', ModelWrap, '', 0)
 	BlzFrameSetPoint(Model, FRAMEPOINT_CENTER, ModelWrap, FRAMEPOINT_CENTER, 0, 0)
 	
-	--> Race
+	-- Race
 	local WrapHeight    = 0.338
 	local RaceWrapWidth = 0.193
 	local RaceWrap      = BlzCreateFrame('EscMenuBackdrop', Wrap, 0, 0)
 	BlzFrameSetSize(RaceWrap, RaceWrapWidth, WrapHeight)
 	BlzFrameSetPoint(RaceWrap, FRAMEPOINT_LEFT, Wrap, FRAMEPOINT_LEFT, 0, 0)
 	
-	--> RaceBtn
+	-- RaceBtn
 	local BtnHeight = 0.03
 	local BtnTop    = -0.012
 	local BtnBottom = 0.038
@@ -75,7 +75,7 @@ function HeroPickInit()
 		)
 	end
 	
-	--> Attr
+	-- Attr
 	local AttrWrapWidth = 1 - RaceWrapWidth
 	local AttrWrap      = BlzCreateFrame('EscMenuBackdrop', Wrap, 0, 0)
 	BlzFrameSetSize(AttrWrap, AttrWrapWidth, WrapHeight)
@@ -114,7 +114,7 @@ function HeroPickInit()
 	BlzFrameSetPoint(AttrBtn[3], FRAMEPOINT_LEFT, AttrBtn[2], FRAMEPOINT_RIGHT, -BtnTop, 0)
 	AttrBtnOnClick(AttrBtn[3], 3)
 	
-	--> Portrait
+	-- Portrait
 	local PortraitSize = 0.162
 	local PortraitWrap = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 	BlzFrameSetSize(PortraitWrap, PortraitSize, PortraitSize)
@@ -125,7 +125,7 @@ function HeroPickInit()
 	BlzFrameSetPoint(PortraitTextureWrap, FRAMEPOINT_CENTER, PortraitWrap, FRAMEPOINT_CENTER, 0, 0)
 	local PortraitTexture = BlzGetFrameByName('ListBoxBackdrop', 0)
 	
-	--> TipText
+	-- TipText
 	local TipTextWrap     = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 	BlzFrameSetSize(TipTextWrap, 0.336, PortraitSize)
 	BlzFrameSetPoint(TipTextWrap, FRAMEPOINT_LEFT, PortraitWrap, FRAMEPOINT_RIGHT, 0.012, 0)
@@ -148,7 +148,7 @@ function HeroPickInit()
 		end
 	end
 	
-	--> AbilBtn
+	-- AbilBtn
 	local AbilBtn                  = {} ---@type table
 	local AbilBtnTexture           = {} ---@type table
 	local AbilityBtnOnLeaveTrigger = CreateTrigger()
@@ -186,13 +186,13 @@ function HeroPickInit()
 		AbilBtnOnEnter(i)
 	end
 	
-	--> StartBtn
+	-- StartBtn
 	local StartBtn = BlzCreateFrame('ScriptDialogButton', AttrWrap, 0, 0)
 	BlzFrameSetText(StartBtn, 'Выбрать')
 	BlzFrameSetSize(StartBtn, PortraitSize, BtnHeight)
 	BlzFrameSetPoint(StartBtn, FRAMEPOINT_BOTTOMLEFT, AttrWrap, FRAMEPOINT_BOTTOMLEFT, 0.032, BtnBottom)
 	
-	--> StartFunction
+	-- StartFunction
 	---@param player player
 	local function Start(player)
 		local id   = GetPlayerId(player)
@@ -235,7 +235,7 @@ function HeroPickInit()
 	BlzTriggerRegisterFrameEvent(StartTrigger, StartBtn, FRAMEEVENT_CONTROL_CLICK)
 	TriggerAddAction(StartTrigger, function() Start(GetTriggerPlayer()) end)
 	
-	--> Update
+	-- Update
 	---@param player player
 	Update = function(player)
 		local id   = GetPlayerId(player)

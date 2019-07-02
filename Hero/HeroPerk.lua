@@ -1,10 +1,11 @@
 function HeroPerkInit()
 	local Update---@type function
+	local TipText---@type framehandle
 	
-	--> GameUI
+	-- GameUI
 	local GameUI  = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	
-	--> Btn
+	-- Btn
 	local BtnIcon = { 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendUnBurrow.blp', 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendBurrow.blp' }
 	local Btn     = BlzCreateFrame('ScoreScreenBottomButtonTemplate', GameUI, 0, 0)
 	BlzFrameSetSize(Btn, 0.04, 0.04)
@@ -13,6 +14,7 @@ function HeroPerkInit()
 	BlzFrameSetTexture(BtnTexture, BtnIcon[1], 0, true)
 	BlzFrameSetVisible(Btn, false)
 	
+	-- BtnText
 	local BtnTextWrap = BlzCreateFrame('TimerDialog', Btn, 0, 0)
 	BlzFrameSetSize(BtnTextWrap, 0.03, 0.023)
 	BlzFrameSetPoint(BtnTextWrap, FRAMEPOINT_BOTTOM, Btn, FRAMEPOINT_TOP, 0, -0.005)
@@ -22,7 +24,7 @@ function HeroPerkInit()
 	BlzFrameSetPoint(BtnText, FRAMEPOINT_CENTER, BtnTextWrap, FRAMEPOINT_CENTER, 0, 0)
 	BlzFrameSetText(BtnText, '0')
 	
-	--> PerkTrigger
+	-- PerkTrigger
 	local PerkTriggerData = {} ---@type table
 	local PerkTrigger     = CreateTrigger()
 	TriggerAddAction(PerkTrigger, function()
@@ -31,18 +33,21 @@ function HeroPerkInit()
 		local frame   = BlzGetTriggerFrame()
 		local data    = PerkTriggerData[GetHandleId(frame)]
 		
-		local ability = PLAYER[id].ability[data[1]].codename
+		local ability = PLAYER[id].ability[data[1]]
 		local level   = data[2]
 		local num     = data[3]
 		
+		local perk    = ability.perk[level][num]
+		
 		if BlzGetTriggerFrameEvent() == FRAMEEVENT_CONTROL_CLICK then
-			--print(ability, level, num)
-			PLAYER[id].perk[ability][level][num] = PLAYER[id].perk[ability][level][num] + 1
+			PLAYER[id].perk[ability.codename][level][num] = PLAYER[id].perk[ability.codename][level][num] + 1
+			PLAYER[id].perkPoint                          = math.max(0, PLAYER[id].perkPoint - 1)
 			
 			Update(player)
 		elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_ENTER then
-			--print('hover')
+			FrameSetText(TipText, perk.name .. '\n\n' .. perk.description)
 		elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_LEAVE then
+			FrameSetText(TipText, '')
 		end
 	end)
 	
@@ -53,7 +58,7 @@ function HeroPerkInit()
 		BlzTriggerRegisterFrameEvent(PerkTrigger, frame, FRAMEEVENT_MOUSE_LEAVE)
 	end
 	
-	--> AbilWrap
+	-- AbilWrap
 	local AbilWrap = BlzCreateFrame('EscMenuBackdrop', GameUI, 0, 0)
 	BlzFrameSetSize(AbilWrap, 0.8, 0.292)
 	BlzFrameSetPoint(AbilWrap, FRAMEPOINT_TOPLEFT, GameUI, FRAMEPOINT_TOPLEFT, 0, -0.05)
@@ -88,7 +93,8 @@ function HeroPerkInit()
 		
 		for j = 1, 10 do
 			Perk[i][j] = BlzCreateFrame('ListBoxWar3', AbilBtn[i], 0, 0)
-			BlzFrameSetSize(Perk[i][j], 0.03, 0.03)
+			local size = j == 10 and 0.05 or 0.03
+			BlzFrameSetSize(Perk[i][j], size, size)
 			PerkTexture[i][j] = BlzGetFrameByName('ListBoxBackdrop', 0)
 			BlzFrameSetVisible(Perk[i][j], false)
 			
@@ -113,14 +119,22 @@ function HeroPerkInit()
 		end
 	end
 	
-	--> TextWrap
-	local TextWrap = BlzCreateFrame('ListBoxWar3', AbilWrap, 0, 0)
-	BlzFrameSetSize(TextWrap, 0.198, 0.23)
-	BlzFrameSetPoint(TextWrap, FRAMEPOINT_TOPLEFT, AbilBtn[6], FRAMEPOINT_TOPRIGHT, 0.002, -0.002)
+	-- TipTextWrap
+	local TipTextWrap = BlzCreateFrame('ListBoxWar3', AbilWrap, 0, 0)
+	BlzFrameSetSize(TipTextWrap, 0.198, 0.23)
+	BlzFrameSetPoint(TipTextWrap, FRAMEPOINT_TOPLEFT, AbilBtn[6], FRAMEPOINT_TOPRIGHT, 0.002, -0.002)
+	
+	--TipText
+	local TipTextPadding = 0.012
+	TipText              = BlzCreateFrameByType('TEXT', '', TipTextWrap, '', 0)
+	BlzFrameSetSize(TipText, BlzFrameGetWidth(TipTextWrap) - TipTextPadding * 2, BlzFrameGetHeight(TipTextWrap) - TipTextPadding * 2)
+	BlzFrameSetPoint(TipText, FRAMEPOINT_TOPLEFT, TipTextWrap, FRAMEPOINT_TOPLEFT, TipTextPadding, -TipTextPadding)
 	
 	---@param player player
 	Update = function(player)
 		local id = GetPlayerId(player)
+		
+		FrameSetText(BtnText, PLAYER[id].perkPoint)
 		
 		for i = 1, #PLAYER[id].ability do
 			local ability = PLAYER[id].ability[i].codename ---@type string
@@ -138,7 +152,10 @@ function HeroPerkInit()
 					
 					local isEnabled = false
 					local border    = 'Disabled'
-					if lvl == 0 and ((level < 4 and count[level - 1] > 0) or (level == 4 and count[4] > 0)) then
+					if lvl == 0
+							and ((level < 4 and count[level - 1] > 0) or (level == 4 and count[4] > 0))
+							and PLAYER[id].perkPoint > 0
+					then
 						border    = 'Available'
 						isEnabled = true
 					end
@@ -154,6 +171,7 @@ function HeroPerkInit()
 		end
 	end
 	
+	-- HeroPerkShow
 	---@param player player
 	function HeroPerkShow(player)
 		local id = GetPlayerId(player)
@@ -164,20 +182,17 @@ function HeroPerkInit()
 		
 		if player == GetLocalPlayer() then
 			BlzFrameSetVisible(Btn, true)
-			--BlzFrameSetVisible(AbilWrap, true)
+			BlzFrameSetVisible(AbilWrap, true)
 		end
 		
 		Update(player)
 	end
 	
-	
-	--> BtnTrigger
-	--> PerkTrigger
+	-- BtnTrigger
 	local BtnTrigger = CreateTrigger()
 	TriggerAddAction(BtnTrigger, function()
 		local player    = GetTriggerPlayer()
 		local isVisible = BlzFrameIsVisible(AbilWrap)
-		
 		if player == GetLocalPlayer() then
 			BlzFrameSetVisible(AbilWrap, not isVisible)
 			BlzFrameSetTexture(BtnTexture, BtnIcon[isVisible and 1 or 2], 0, true)
@@ -185,8 +200,9 @@ function HeroPerkInit()
 	end)
 	BlzTriggerRegisterFrameEvent(BtnTrigger, Btn, FRAMEEVENT_CONTROL_CLICK)
 	
+	
 	--{ TEST
-	local V = 0.2
+	local V = 0.0
 	local function change(add)
 		V = V + add
 		ClearTextMessages()

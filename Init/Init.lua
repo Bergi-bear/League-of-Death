@@ -16,13 +16,23 @@ end
 
 ---@param frame framehandle
 ---@param enabled boolean
-function FrameSetEnable(frame, enabled)
+---@param player player
+function FrameSetEnable(frame, enabled, player)
 	if player == nil or player == GetLocalPlayer() then
 		BlzFrameSetEnable(frame, enabled)
 	end
 end
 
---> InitGlobals hook
+---@param frame framehandle
+---@param text string
+---@param player player
+function FrameSetText(frame, text, player)
+	if player == nil or player == GetLocalPlayer() then
+		BlzFrameSetText(frame, text)
+	end
+end
+
+-- InitGlobals hook
 local InitGlobals_hook = InitGlobals
 function InitGlobals()
 	InitGlobals_hook()
@@ -30,7 +40,7 @@ function InitGlobals()
 	-- setting
 	math.randomseed(os.time())
 	
-	--> PLAYER
+	-- PLAYER
 	PLAYER = {}
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
 		PLAYER[i] = {
@@ -38,7 +48,7 @@ function InitGlobals()
 			ability                = nil,
 			race                   = math.random(1, #RACE - 1),
 			attr                   = math.random(1, 3),
-			perkPoint              = 1,
+			perkPoint              = 60,
 			perk                   = {},
 			HeroPick_BgModel       = '',
 			HeroPerk_AbilitySelect = 1
@@ -70,15 +80,8 @@ function InitGlobals()
 			end
 		end
 		
-		for i = 1, 3 do
-			if GetPlayerAbilityPerkLevel(player, ability, 1, i) > 0
-					and
-					GetPlayerAbilityPerkLevel(player, ability, 2, i) > 0
-					and
-					GetPlayerAbilityPerkLevel(player, ability, 3, i) > 0
-			then
-				count[4] = 1
-			end
+		if count[1] > 0 and count[2] > 0 and count[3] > 0 then
+			count[4] = 1
 		end
 		
 		return count
