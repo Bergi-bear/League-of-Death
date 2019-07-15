@@ -135,6 +135,7 @@ function HeroPickInit()
 	BlzFrameSetSize(TipText, BlzFrameGetWidth(TipTextWrap) - TipTextPadding * 2, BlzFrameGetHeight(TipTextWrap) - TipTextPadding * 2)
 	BlzFrameSetPoint(TipText, FRAMEPOINT_TOP, TipTextWrap, FRAMEPOINT_TOP, 0, -TipTextPadding)
 	
+	-- SetTipText
 	---@param player player
 	---@param text string
 	local function SetTipText(player, text)
@@ -143,47 +144,44 @@ function HeroPickInit()
 			text = RACE[PLAYER[id].race].attr[PLAYER[id].attr].description
 		end
 		
-		if player == GetLocalPlayer() then
-			BlzFrameSetText(TipText, text)
-		end
+		FrameSetText(TipText, text)
 	end
 	
-	-- AbilBtn
-	local AbilBtn                  = {} ---@type table
-	local AbilBtnTexture           = {} ---@type table
-	local AbilityBtnOnLeaveTrigger = CreateTrigger()
-	TriggerAddAction(AbilityBtnOnLeaveTrigger, function()
-		SetTipText(GetTriggerPlayer(), '')
+	-- AbilityBtnHover
+	local AbilityBtnHoverData    = {} ---@type table
+	local AbilityBtnHoverTrigger = CreateTrigger()
+	TriggerAddAction(AbilityBtnHoverTrigger, function()
+		if BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_ENTER then
+			local player = GetTriggerPlayer()
+			local id     = GetPlayerId(player)
+			local index  = AbilityBtnHoverData[GetHandleId(BlzGetTriggerFrame())]
+			SetTipText(player, RACE[PLAYER[id].race].attr[PLAYER[id].attr].ability[index].description)
+		elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_LEAVE then
+			SetTipText(GetTriggerPlayer(), '')
+		end
 	end)
 	
-	---@param index integer
-	local function AbilBtnOnEnter(index)
-		local AbilBtnOnEnterTrigger = CreateTrigger()
-		BlzTriggerRegisterFrameEvent(AbilBtnOnEnterTrigger, AbilBtn[index], FRAMEEVENT_MOUSE_ENTER)
-		TriggerAddAction(
-				AbilBtnOnEnterTrigger,
-				function()
-					local player = GetTriggerPlayer()
-					local id     = GetPlayerId(player)
-					SetTipText(player, RACE[PLAYER[id].race].attr[PLAYER[id].attr].ability[index].description)
-				end
-		)
-	end
-	
-	local AbilEmptyTextFile = 'ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp'
+	-- AbilBtn
+	local AbilBtn        = {} ---@type table
+	local AbilBtnTexture = {} ---@type table
 	for i = 1, 6 do
 		AbilBtn[i] = BlzCreateFrame('ListBoxWar3', AttrWrap, 0, 0)
 		BlzFrameSetSize(AbilBtn[i], 0.05, 0.05)
+		
 		if i == 1 then
 			BlzFrameSetPoint(AbilBtn[i], FRAMEPOINT_TOPLEFT, TipTextWrap, FRAMEPOINT_BOTTOMLEFT, 0, -0.01)
 		else
 			BlzFrameSetPoint(AbilBtn[i], FRAMEPOINT_LEFT, AbilBtn[i - 1], FRAMEPOINT_RIGHT, 0.0074, 0)
 		end
 		AbilBtnTexture[i] = BlzGetFrameByName('ListBoxBackdrop', 0)
-		BlzFrameSetTexture(AbilBtnTexture[i], AbilEmptyTextFile, 0, true)
 		
-		BlzTriggerRegisterFrameEvent(AbilityBtnOnLeaveTrigger, AbilBtn[i], FRAMEEVENT_MOUSE_LEAVE)
-		AbilBtnOnEnter(i)
+		local border      = BlzCreateFrame('ListBoxWar3', AbilBtn[i], 0, 0)
+		BlzFrameSetAllPoints(border, AbilBtn[i])
+		BlzFrameSetTexture(BlzGetFrameByName('ListBoxBackdrop', 0), 'UI\\Icon\\Border\\LearnedSimple.blp', 0, true)
+		
+		AbilityBtnHoverData[GetHandleId(border)] = i
+		BlzTriggerRegisterFrameEvent(AbilityBtnHoverTrigger, border, FRAMEEVENT_MOUSE_ENTER)
+		BlzTriggerRegisterFrameEvent(AbilityBtnHoverTrigger, border, FRAMEEVENT_MOUSE_LEAVE)
 	end
 	
 	-- StartBtn
@@ -228,6 +226,7 @@ function HeroPickInit()
 			PanCameraTo(x, y)
 		end
 		
+		FogModifierStart(CreateFogModifierRadius(player, FOG_OF_WAR_VISIBLE, 0, -500.00, 3700, true, true))
 		HeroPerkShow(player)
 	end
 	
@@ -242,39 +241,29 @@ function HeroPickInit()
 		
 		local race = PLAYER[id].race
 		for i = 1, #RACE - 1 do
-			if player == GetLocalPlayer() then
-				BlzFrameSetEnable(RaceBtn[i], race ~= i)
-			end
+			FrameSetEnable(RaceBtn[i], race ~= i, player)
 		end
 		
 		local attr = PLAYER[id].attr
 		for i = 1, 3 do
-			if player == GetLocalPlayer() then
-				BlzFrameSetEnable(AttrBtn[i], attr ~= i)
-			end
+			FrameSetEnable(AttrBtn[i], attr ~= i, player)
 		end
 		
 		local abilitys = RACE[race].attr[attr].ability
 		for i = 1, 6 do
-			if player == GetLocalPlayer() then
-				BlzFrameSetVisible(AbilBtn[i], i <= #abilitys)
-				if (i <= #abilitys) then
-					BlzFrameSetTexture(AbilBtnTexture[i], RACE[race].attr[attr].ability[i].icon, 0, true)
-				end
+			FrameSetVisible(AbilBtn[i], i <= #abilitys, player)
+			if (i <= #abilitys) then
+				FrameSetTexture(AbilBtnTexture[i], 'UI\\Icon\\Ability\\' .. RACE[race].attr[attr].ability[i].codename .. '.blp', player)
 			end
 		end
 		
 		if RACE[race].model ~= PLAYER[id].HeroPick_BgModel then
 			PLAYER[id].HeroPick_BgModel = RACE[race].model
-			if (player == GetLocalPlayer()) then
-				BlzFrameSetModel(Model, PLAYER[id].HeroPick_BgModel, 0)
-			end
+			FrameSetModel(Model, PLAYER[id].HeroPick_BgModel, player)
 		end
 		
-		if (player == GetLocalPlayer()) then
-			BlzFrameSetTexture(PortraitTexture, 'UI\\Hero\\Previev\\' .. race .. '_' .. attr .. '.blp', 0, true)
-			SetTipText(player, '')
-		end
+		FrameSetTexture(PortraitTexture, 'UI\\Hero\\Previev\\' .. race .. '_' .. attr .. '.blp', player)
+		SetTipText(player, '')
 	end
 	
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -282,7 +271,7 @@ function HeroPickInit()
 	end
 	
 	--{ TODO: only for test
-	PLAYER[0].attr = 1
+	PLAYER[GetPlayerId(GetLocalPlayer())].attr = 1
 	Start(GetLocalPlayer())
 	--}
 end

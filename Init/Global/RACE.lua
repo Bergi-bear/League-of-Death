@@ -1,31 +1,29 @@
 RACE = {
-	-- 1: horde
+	-- 1: Horde
 	{
 		name  = "Орда",
 		model = "UI\\Glues\\Singleplayer\\Orccampaign3d\\orccampaign3d.mdx",
 		attr  = {
-			-- 1: str
 			{
 				description = "Орк - cила",
 				unit        = FourCC("O000"),
 				ability     = {
-					ABILITY.horde
+					ABILITY.ShakingBlow,
+					ABILITY.Horde
 				}
 			},
-			-- 2: agi
 			{
 				unit        = FourCC("O001"),
 				description = "Орк - ловка",
 				ability     = {
-					ABILITY.horde
+					ABILITY.Horde
 				}
 			},
-			-- 3: int
 			{
 				unit        = FourCC("O002"),
 				description = "Орк - инта",
 				ability     = {
-					ABILITY.horde
+					ABILITY.Horde
 				}
 			}
 		}

@@ -5,37 +5,16 @@ function table.clone(org)
 	return { table.unpack(org) }
 end
 
----@param frame framehandle
----@param texFile string
----@param player player
-function FrameSetTexture(frame, texFile, player)
-	if player == nil or player == GetLocalPlayer() then
-		BlzFrameSetTexture(frame, texFile, 0, true)
-	end
-end
-
----@param frame framehandle
----@param enabled boolean
----@param player player
-function FrameSetEnable(frame, enabled, player)
-	if player == nil or player == GetLocalPlayer() then
-		BlzFrameSetEnable(frame, enabled)
-	end
-end
-
----@param frame framehandle
----@param text string
----@param player player
-function FrameSetText(frame, text, player)
-	if player == nil or player == GetLocalPlayer() then
-		BlzFrameSetText(frame, text)
-	end
-end
+GROUP_ENUM_ONCE        = CreateGroup() -- Группа для одноразового перебора юнитов
+TIMER_PERIOD           = 0.03125 -- Период таймера для движения: 1/32 секунды
 
 -- InitGlobals hook
 local InitGlobals_hook = InitGlobals
 function InitGlobals()
 	InitGlobals_hook()
+	
+	-- frame
+	BlzLoadTOCFile('UI\\Frame\\Main.toc')
 	
 	-- setting
 	math.randomseed(os.time())
@@ -43,6 +22,9 @@ function InitGlobals()
 	-- PLAYER
 	PLAYER = {}
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_GOLD, 9000)
+		SetPlayerState(Player(i), PLAYER_STATE_RESOURCE_LUMBER, 9000)
+		
 		PLAYER[i] = {
 			hero                   = nil,
 			ability                = nil,
@@ -57,13 +39,13 @@ function InitGlobals()
 	
 	---@param player player
 	---@param ability string
-	---@param level integer
-	---@param num integer
+	---@param row integer
+	---@param col integer
 	---@return integer
-	function GetPlayerAbilityPerkLevel(player, ability, level, num)
+	function GetPlayerAbilityPerkLevel(player, ability, row, col)
 		local id = GetPlayerId(player)
 		if (PLAYER[id].perk[ability] == nil) then return -1 end
-		return PLAYER[id].perk[ability][level][num]
+		return PLAYER[id].perk[ability][row][col]
 	end
 	
 	---@param player player
@@ -74,9 +56,9 @@ function InitGlobals()
 		
 		local perk  = PLAYER[id].perk[ability]
 		
-		for level = 1, 3 do
-			for num = 1, 3 do
-				count[level] = count[level] + perk[level][num]
+		for row = 1, 3 do
+			for col = 1, 3 do
+				count[row] = count[row] + perk[row][col]
 			end
 		end
 		
@@ -86,7 +68,6 @@ function InitGlobals()
 		
 		return count
 	end
-	
 	
 	-- init
 	HeroPerkInit()
