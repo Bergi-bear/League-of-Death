@@ -224,9 +224,10 @@ function HeroPickInit()
 			ClearSelection()
 			SelectUnit(PLAYER[id].hero, true)
 			PanCameraTo(x, y)
+			
+			FogEnable(false)
+			FogMaskEnable(false)
 		end
-		
-		FogModifierStart(CreateFogModifierRadius(player, FOG_OF_WAR_VISIBLE, 0, -500.00, 3700, true, true))
 		HeroPerkShow(player)
 	end
 	

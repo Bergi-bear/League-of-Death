@@ -9,3 +9,10 @@ function AddSpecialEffectMatrixScale(modelName, xe, ye, x, y, z)
 	BlzSetSpecialEffectMatrixScale(effect, x, y, z)
 	DestroyEffect(effect)
 end
+
+---@param modelName string
+---@param x real
+---@param y real
+function AddSpecialEffectXY(modelName, x, y)
+	DestroyEffect(AddSpecialEffect(modelName, x, y))
+end

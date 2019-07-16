@@ -29,14 +29,16 @@ function StartWave(w, bb)
 	local AC = CreateGroup()--allcreep
 	if w == 1 then
 		--Кулак с вилами
-		local boss = CreateUnit(p, FourCC('H000'), -100, 3000, 0)
+		local boss  = CreateUnit(p, FourCC('H000'), -100, 3000, 0)
+		local bossX = GetUnitX(boss)
+		local bossY = GetUnitY(boss)
 		GroupAddUnit(AC, boss)
-		for i = 1, bb, 1 do
-			creep = CreateUnit(p, FourCC('hpea'), GetUnitX(boss), GetUnitY(boss), GetRandomReal(0, 360))
+		for i = 1, bb do
+			creep = CreateUnit(p, FourCC('hpea'), bossX, bossY, math.random(0, 360))
 			IssueImmediateOrder(creep, "stop")
 			GroupAddUnit(AC, creep)
 		end
-		AISimpleFounder(AC)
+		--AISimpleFounder(AC)
 	end
 end
 

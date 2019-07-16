@@ -7,18 +7,34 @@ end
 
 ---@param x real
 ---@param distance real
----@param angle real degrees
+---@param angle real radian
 ---@return real
 function GetPolarOffsetX(x, distance, angle)
-	return x + distance * Cos(angle * bj_DEGTORAD)
+	return x + distance * math.cos(angle)
+end
+
+---@param y real
+---@param distance real
+---@param angle real radian
+---@return real
+function GetPolarOffsetY(y, distance, angle)
+	return y + distance * math.sin(angle)
+end
+
+---@param x real
+---@param distance real
+---@param angle real degrees
+---@return real
+function MoveX(x, distance, angle)
+	return x + distance * math.cos(angle * bj_DEGTORAD)
 end
 
 ---@param y real
 ---@param distance real
 ---@param angle real degrees
 ---@return real
-function GetPolarOffsetY(y, distance, angle)
-	return y + distance * Sin(angle * bj_DEGTORAD)
+function MoveY(y, distance, angle)
+	return y + distance * math.sin(angle * bj_DEGTORAD)
 end
 
 local GetTerrainZ_location = Location(0, 0)
@@ -73,14 +89,19 @@ function DistanceBetweenXY(xa, ya, xb, yb)
 	return math.sqrt(dx * dx + dy * dy)
 end
 
+---@param xa real
+---@param ya real
+---@param xb real
+---@param yb real
+---@return real radian
+function AngleBetweenXY(xa, ya, xb, yb)
+	return math.atan(yb - ya, xb - xa)
+end
+
 --[[
 function SetUnitPositionPolar(unit target, real distance, real angle){
 SetUnitX(target, GetPolarOffsetX(GetUnitX(target), distance, angle));
 SetUnitY(target, GetPolarOffsetY(GetUnitY(target), distance, angle));
-}
-
-function AngleBetweenXY(real x1, real y1, real x2, real y2) -> real {
-return bj_RADTODEG * Atan2(y2 - y1, x2 - x1);
 }
 function AngleBetweenWidgets(widget target1, widget target2) -> real {
 return AngleBetweenCoords(GetWidgetX(target1), GetWidgetY(target1), GetWidgetX(target2), GetWidgetY(target2));

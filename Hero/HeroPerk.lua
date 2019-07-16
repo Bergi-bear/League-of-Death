@@ -6,7 +6,7 @@ function HeroPerkInit()
 	local GameUI  = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	
 	-- Btn
-	local BtnIcon = { 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendUnBurrow.blp', 'ReplaceableTextures\\CommandButtons\\BTNCryptFiendBurrow.blp' }
+	local BtnIcon = { 'ReplaceableTextures/CommandButtons/BTNCryptFiendUnBurrow.blp', 'ReplaceableTextures/CommandButtons/BTNCryptFiendBurrow.blp' }
 	local Btn     = BlzCreateFrame('ScoreScreenBottomButtonTemplate', GameUI, 0, 0)
 	BlzFrameSetSize(Btn, 0.04, 0.04)
 	BlzFrameSetPoint(Btn, FRAMEPOINT_BOTTOMLEFT, GameUI, FRAMEPOINT_BOTTOMLEFT, 0, 0.18)
@@ -79,7 +79,7 @@ function HeroPerkInit()
 		AbilBtnTexture[i] = BlzGetFrameByName('ListBoxBackdrop', 0)
 		
 		BlzFrameSetAllPoints(BlzCreateFrame('ListBoxWar3', AbilBtn[i], 0, 0), AbilBtn[i])
-		BlzFrameSetTexture(BlzGetFrameByName('ListBoxBackdrop', 0), 'UI\\Icon\\Border\\LearnedSimple.blp', 0, true)
+		BlzFrameSetTexture(BlzGetFrameByName('ListBoxBackdrop', 0), 'UI/Icon/Border/LearnedSimple.blp', 0, true)
 		
 		Perk[i]           = {}
 		PerkTexture[i]    = {}
@@ -139,7 +139,7 @@ function HeroPerkInit()
 		
 		for i = 1, #PLAYER[id].ability do
 			local ability = PLAYER[id].ability[i].codename ---@type string
-			FrameSetTexture(AbilBtnTexture[i], 'UI\\Icon\\Ability\\' .. ability .. '.blp', player)
+			FrameSetTexture(AbilBtnTexture[i], 'UI/Icon/Ability/' .. ability .. '.blp', player)
 			
 			local count = GetPlayerAbilityPerkLevels(player, ability)
 			
@@ -164,8 +164,8 @@ function HeroPerkInit()
 					
 					if player == GetLocalPlayer() then
 						BlzFrameSetEnable(PerkBtn[i][pk], isEnabled)
-						BlzFrameSetTexture(PerkTexture[i][pk], 'UI\\Icon\\Perk\\' .. ability .. '_' .. row .. '_' .. col .. '.blp', 0, true)
-						BlzFrameSetTexture(PerkBtnTexture[i][pk], 'UI\\Icon\\Border\\' .. border .. legendary .. '.blp', 0, true)
+						BlzFrameSetTexture(PerkTexture[i][pk], 'UI/Icon/Perk/' .. ability .. '_' .. row .. '_' .. col .. '.blp', 0, true)
+						BlzFrameSetTexture(PerkBtnTexture[i][pk], 'UI/Icon/Border/' .. border .. legendary .. '.blp', 0, true)
 						
 						if PLAYER[id].ability[i].perk[row][col].hide ~= nil then
 							BlzFrameSetVisible(PerkBtn[i][pk], false)
@@ -190,6 +190,10 @@ function HeroPerkInit()
 			BlzFrameSetVisible(Btn, true)
 			--BlzFrameSetVisible(AbilWrap, true)
 		end
+		
+		-- TODO only for test
+		--PLAYER[id].perk[ABILITY.ShakingBlow.codename][3][2] = 1
+		--HeroPerkLearn(player, ABILITY.ShakingBlow.codename, 3, 2)
 		
 		Update(player)
 	end

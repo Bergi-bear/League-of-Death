@@ -65,7 +65,7 @@ ABILITY = {
 	},
 	ShakingBlow = {
 		name        = 'Shaking Blow',
-		id          = FourCC('A000'),
+		id          = FourCC('ASBl'),
 		description = 'Shakes the ground causing damage to enemies around',
 		perk        = {
 			[1] = {
@@ -74,53 +74,46 @@ ABILITY = {
 					description = 'Increases area of damage'
 				},
 				[2] = {
-					name        = 'Регенерация Орды',
-					description = 'Увеличивает эффективность регенерации HP/MP'
+					name        = 'Destroyer Strenght',
+					description = 'Increases damage by your strenght'
 				},
 				[3] = {
-					hide        = true,
-					name        = 'Закалка Орды',
-					description = 'Получает слабую магическую сопротивляемость'
+					name        = 'Champion Strenght',
+					description = 'Slows down affected targets'
 				}
 			},
 			[2] = {
 				[1] = {
-					hide        = true,
-					name        = 'Опыт Орды',
-					description = 'Каждый 100-й убитый добавляет единицу основного аттрибута'
+					name        = 'Berserk Skill',
+					description = 'Reduces coldown from each enemy in area of effect'
 				},
 				[2] = {
-					hide        = true,
-					name        = 'Сила Орды',
-					description = 'Каждый 10-ый удар игнорирует броню'
+					name        = 'Destroyer Skill',
+					description = 'Reduces defence of affected targets'
 				},
 				[3] = {
-					hide        = true,
-					name        = 'Крепкость орды',
-					description = 'Блокирует каждый 50-ый полученный удар'
+					name        = 'Champion Skill',
+					description = 'Reduces attack of affected targets'
 				}
 			},
 			[3] = {
 				[1] = {
-					hide        = true,
-					name        = 'Ярость Орды',
-					description = 'Увеличивает урон от недостающего HP'
+					name        = 'Berserk Mastery',
+					description = 'Deals more damage to enemies closer to center'
 				},
 				[2] = {
-					name        = 'Кровожадность Орды',
-					description = 'Каждый 20-ый убитый добавляет доп. очки раунда'
+					name        = 'Destroyer Mastery',
+					description = 'Becomes target spell. Deals extra damage along line in direction of target'
 				},
 				[3] = {
-					hide        = true,
-					name        = 'Живучесть Орды',
-					description = 'Не умирает от смертельного урона, имеет перезарядку'
+					name        = 'Champion Mastery',
+					description = 'Provokes affected enemies to attack you'
 				}
 			},
 			[4] = {
 				[1] = {
-					hide        = true,
-					name        = 'Легендарная Особенность Орды',
-					description = 'Увеличивает все бонусы от Особенности Орды вдвое. Требует: Не менее трёх Особенностей Орды'
+					name        = 'Legendary Shaking Blow',
+					description = 'Херачит землетрясение'
 				}
 			}
 		}
@@ -128,29 +121,26 @@ ABILITY = {
 	jump        = {
 		name        = 'Яростный врыв',
 		id          = FourCC('0000'),
-		icon        = 'ReplaceableTextures\\CommandButtons\\BTNThorns.blp',
 		description = 'Яростно врывается прыжком в указанную область, нанося урон поражённым целям',
 	},
 	helix       = {
 		name        = 'Размашистый удар',
 		id          = FourCC('0000'),
-		icon        = 'ReplaceableTextures\\CommandButtons\\BTNCommand.blp',
 		description = 'Совершает резкий размашистый удар вокруг себя, нанося врагам урон',
 	},
 	swipe       = {
 		name        = 'Гневный удар',
 		id          = FourCC('0000'),
-		icon        = 'ReplaceableTextures\\CommandButtons\\BTNTrueShot.blp',
 		description = 'Каждый 10-ый удар совершается с особой яростью и наносит дополнительный урон',
 	},
 	rage        = {
 		name        = 'Бешенство',
 		id          = FourCC('0000'),
-		icon        = 'ReplaceableTextures\\CommandButtons\\BTNSilence.blp',
 		description = 'Герой впадает в бешенство, приобретая усиленные рефлексы, а также получает сопротивляемость к магии',
 	}
 }
 
 for key in pairs(ABILITY) do
 	ABILITY[key].codename = key
+	ABILITY[key].data     = {}
 end

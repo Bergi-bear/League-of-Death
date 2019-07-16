@@ -12,6 +12,12 @@ function HeroPerkLearn(player, codename, row, col)
 				BlzSetUnitMaxHP(hero, GetUnitState(hero, UNIT_STATE_MAX_LIFE) + 1000)
 			end
 		end
+	elseif codename == ABILITY.ShakingBlow.codename then
+		if row == 3 then
+			if col == 2 then
+				SetUnitAbilityLevel(hero, ABILITY.ShakingBlow.id, 2)
+			end
+		end
 	end
 	
 	SetWidgetLife(hero, GetUnitState(hero, UNIT_STATE_MAX_LIFE))

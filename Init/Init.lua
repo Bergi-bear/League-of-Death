@@ -70,6 +70,8 @@ function InitGlobals()
 	end
 	
 	-- init
+	EVENT_PLAYER_UNIT_SPELL_EFFECT_INIT()
+	DummyInit()
 	HeroPerkInit()
 	HeroPickInit()
 end

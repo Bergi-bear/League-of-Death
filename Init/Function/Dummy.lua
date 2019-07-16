@@ -12,25 +12,33 @@ function DummyCast (target, id, x, y)
 	)
 end
 
-do
-	local BTLF = FourCC('BTLF')
-	local ID   = FourCC('e000')
-	
-	---@param caster unit
-	---@param id integer
-	---@param level integer
-	---@param order string
-	---@param target unit
-	function DummyCastOnUnit (caster, id, level, order, target)
-		local dummy = caster == nil
-				and
-				CreateUnit(Player(23), ID, GetUnitX(target), GetUnitY(target), 0)
-				or
-				CreateUnit(GetOwningPlayer(caster), ID, GetUnitX(caster), GetUnitY(caster), 0)
-		UnitAddAbility(dummy, id)
-		SetUnitAbilityLevel(dummy, id, level)
-		IssueTargetOrder(dummy, order, target)
-		UnitApplyTimedLife(dummy, BTLF, 1)
-	end
+Dummy_BTLF               = FourCC('BTLF')
+local DummyCastOnUnit_id = FourCC('e000')
+---@param caster unit
+---@param id integer
+---@param level integer
+---@param order string
+---@param target unit
+function DummyCastOnUnit (caster, id, level, order, target)
+	local dummy = caster == nil
+			and
+			CreateUnit(Player(23), DummyCastOnUnit_id, GetUnitX(target), GetUnitY(target), 0)
+			or
+			CreateUnit(GetOwningPlayer(caster), DummyCastOnUnit_id, GetUnitX(caster), GetUnitY(caster), 0)
+	UnitAddAbility(dummy, id)
+	SetUnitAbilityLevel(dummy, id, level)
+	IssueTargetOrder(dummy, order, target)
+	UnitApplyTimedLife(dummy, Dummy_BTLF, 1)
+end
 
+function DummyInit()
+	DUMMY = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), FourCC('dumy'), 0, 0, 0)
+end
+
+---@param target unit
+---@param order integer
+function DummyCastTarget(target, order)
+	SetUnitX(DUMMY, GetUnitX(target))
+	SetUnitY(DUMMY, GetUnitY(target))
+	IssueTargetOrderById(DUMMY, order, target)
 end
