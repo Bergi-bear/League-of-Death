@@ -98,15 +98,44 @@ function AngleBetweenXY(xa, ya, xb, yb)
 	return math.atan(yb - ya, xb - xa)
 end
 
---[[
-function SetUnitPositionPolar(unit target, real distance, real angle){
-SetUnitX(target, GetPolarOffsetX(GetUnitX(target), distance, angle));
-SetUnitY(target, GetPolarOffsetY(GetUnitY(target), distance, angle));
-}
-function AngleBetweenWidgets(widget target1, widget target2) -> real {
-return AngleBetweenCoords(GetWidgetX(target1), GetWidgetY(target1), GetWidgetX(target2), GetWidgetY(target2));
-}
+---@param a real radian
+---@param b real radian
+---@return real radian
+function AngleDiff(a, b)
+	local c---@type real
+	local d---@type real
+	if a > b then
+		c = a - b
+		d = b - a + 2 * bj_PI
+	else
+		c = b - a
+		d = a - b + 2 * bj_PI
+	end
+	return c > d and d or c
+end
 
+---@author xgm.guru/p/wc3/warden-math
+---@param a real degrees
+---@param b real degrees
+---@return real degrees
+function AngleDifference(a, b)
+	local x---@type real
+	a = math.abs(a, 360)
+	b = math.abs(b, 360)
+	if (a > b) then
+		x = a
+		a = b
+		b = x
+	end
+	x = b - 360
+	if (b - a > a - x) then
+		b = x
+	end
+	return math.abs(a - b)
+end
+
+
+--[[
 function DistanceBetweenCoords3D(real x1, real y1, real z1, real x2, real y2, real z2) -> real {
 real dx = x2 - x1;
 real dy = y2 - y1;
@@ -114,67 +143,15 @@ real dz = z2 - z1;
 return SquareRoot(dx*dx + dy*dy + dz*dz);
 }
 
-function DistanceBetweenWidgets(widget target1, widget target2) -> real {
-return DistanceBetweenCoords(GetWidgetX(target1), GetWidgetY(target1), GetWidgetX(target2), GetWidgetY(target2));
-}
-
-function GetTerrainZ(real x, real y) -> real {
-MoveLocation(locationZ, x, y);
-return GetLocationZ(locationZ);
-}
 function GetUnitZ(unit target) -> real {
 return GetTerrainZ(GetUnitX(target), GetUnitY(target)) + GetUnitFlyHeight(target);
 }
-
-function UnitAddAbilityZ(unit target){
-if (GetUnitAbilityLevel(target, AbilityUnitZ) == 0){ UnitAddAbility(target, AbilityUnitZ); }
-}
-function UnitRemoveAbilityZ(unit target){
-if (GetUnitAbilityLevel(target, AbilityUnitZ) > 0){ UnitRemoveAbility(target, AbilityUnitZ); }
-}
-
-function SetUnitXY(unit target, real x, real y) -> unit {
-SetUnitX(target, x);
-SetUnitY(target, y);
-return target;
-}
-function SetUnitXYZ(unit target, real x, real y, real z) -> unit {
-SetUnitXY(target, x, y);
-SetUnitZ(target, z);
-return target;
-}
-function SetUnitXYZF(unit target, real x, real y, real z, real f) -> unit {
-SetUnitXY(target, x, y);
-SetUnitZ(target, z);
-SetUnitFacing(target, f);
-return target;
-}
-
 
 
 // https://xgm.guru/p/wc3/perpendicular
 // Находит длину перпендикуляра от отрезка, заданного Xa, Ya, Xb, Yb к точке, заданной Xc, Yc.
 function Perpendicular (real Xa, real Ya, real Xb, real Yb, real Xc, real Yc) -> real {
 return SquareRoot((Xa - Xc) * (Xa - Xc) + (Ya - Yc) * (Ya - Yc)) * Sin(Atan2(Yc-Ya,Xc-Xa) - Atan2(Yb-Ya,Xb-Xa));
-}
-
-
-// https://xgm.guru/p/wc3/warden-math
-// Расстояние между двумя углами
-function AngleDifference(real a1, real a2) -> real {
-real x;
-a1 = ModuloReal(a1, 360);
-a2 = ModuloReal(a2, 360);
-if (a1 > a2) {
-x = a1;
-a1 = a2;
-a2 = x;
-}
-x = a2 - 360;
-if (a2 - a1 > a1 - x){
-a2 = x;
-}
-return RAbsBJ(a1 - a2);
 }
 
 /*

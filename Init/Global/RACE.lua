@@ -9,6 +9,7 @@ RACE = {
 				unit        = FourCC("O000"),
 				ability     = {
 					ABILITY.ShakingBlow,
+					ABILITY.BattleRush,
 					ABILITY.Horde
 				}
 			},

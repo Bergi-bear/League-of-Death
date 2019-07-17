@@ -13,6 +13,14 @@ end
 ---@param modelName string
 ---@param x real
 ---@param y real
-function AddSpecialEffectXY(modelName, x, y)
+function AddSpecialEffectOnce(modelName, x, y)
 	DestroyEffect(AddSpecialEffect(modelName, x, y))
+end
+
+---@param modelName string
+---@param targetWidget widget
+---@param attachPointName string
+---@return effect
+function AddSpecialEffectTargetOnce(modelName, targetWidget, attachPointName)
+	DestroyEffect(AddSpecialEffectTarget(modelName, targetWidget, attachPointName))
 end

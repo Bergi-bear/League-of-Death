@@ -118,26 +118,68 @@ ABILITY = {
 			}
 		}
 	},
-	jump        = {
-		name        = 'Яростный врыв',
-		id          = FourCC('0000'),
-		description = 'Яростно врывается прыжком в указанную область, нанося урон поражённым целям',
+	BattleRush  = {
+		name        = 'Battle Rush',
+		id          = FourCC('ABRu'),
+		description = 'Furiously rushs into the target causing damage to enemies on the way',
+		perk        = {
+			[1] = {
+				[1] = {
+					name        = 'Berserk Strenght',
+					description = 'Increases damage radius'
+				},
+				[2] = {
+					name        = 'Destroyer Strenght',
+					description = 'Increases the range'
+				},
+				[3] = {
+					name        = 'Champion Strenght',
+					description = 'Pushs affected targets '
+				}
+			},
+			[2] = {
+				[1] = {
+					hide        = true,
+					name        = 'Опыт Орды',
+					description = 'Каждый 100-й убитый добавляет единицу основного аттрибута'
+				},
+				[2] = {
+					hide        = true,
+					name        = 'Сила Орды',
+					description = 'Каждый 10-ый удар игнорирует броню'
+				},
+				[3] = {
+					hide        = true,
+					name        = 'Крепкость орды',
+					description = 'Блокирует каждый 50-ый полученный удар'
+				}
+			},
+			[3] = {
+				[1] = {
+					hide        = true,
+					name        = 'Ярость Орды',
+					description = 'Увеличивает урон от недостающего HP'
+				},
+				[2] = {
+					hide        = true,
+					name        = 'Кровожадность Орды',
+					description = 'Каждый 20-ый убитый добавляет доп. очки раунда'
+				},
+				[3] = {
+					hide        = true,
+					name        = 'Живучесть Орды',
+					description = 'Не умирает от смертельного урона, имеет перезарядку'
+				}
+			},
+			[4] = {
+				[1] = {
+					hide        = true,
+					name        = 'Легендарная Особенность Орды',
+					description = 'Увеличивает все бонусы от Особенности Орды вдвое. Требует: Не менее трёх Особенностей Орды'
+				}
+			}
+		}
 	},
-	helix       = {
-		name        = 'Размашистый удар',
-		id          = FourCC('0000'),
-		description = 'Совершает резкий размашистый удар вокруг себя, нанося врагам урон',
-	},
-	swipe       = {
-		name        = 'Гневный удар',
-		id          = FourCC('0000'),
-		description = 'Каждый 10-ый удар совершается с особой яростью и наносит дополнительный урон',
-	},
-	rage        = {
-		name        = 'Бешенство',
-		id          = FourCC('0000'),
-		description = 'Герой впадает в бешенство, приобретая усиленные рефлексы, а также получает сопротивляемость к магии',
-	}
 }
 
 for key in pairs(ABILITY) do

@@ -1,3 +1,11 @@
+do
+	local InitGlobals_hook = InitGlobals ---@type function
+	function InitGlobals()
+		InitGlobals_hook()
+		DUMMY = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), FourCC('dumy'), 0, 0, 0)
+	end
+end
+
 ---@param target unit
 ---@param id integer
 ---@param x real
@@ -12,7 +20,6 @@ function DummyCast (target, id, x, y)
 	)
 end
 
-Dummy_BTLF               = FourCC('BTLF')
 local DummyCastOnUnit_id = FourCC('e000')
 ---@param caster unit
 ---@param id integer
@@ -28,11 +35,7 @@ function DummyCastOnUnit (caster, id, level, order, target)
 	UnitAddAbility(dummy, id)
 	SetUnitAbilityLevel(dummy, id, level)
 	IssueTargetOrder(dummy, order, target)
-	UnitApplyTimedLife(dummy, Dummy_BTLF, 1)
-end
-
-function DummyInit()
-	DUMMY = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), FourCC('dumy'), 0, 0, 0)
+	UnitApplyTimedLife(dummy, BTLF_ID, 1)
 end
 
 ---@param target unit
