@@ -57,7 +57,7 @@ end
 ---@param z real
 function SetUnitZ(target, z)
 	MoveLocation(GetTerrainZ_location, GetUnitX(target), GetUnitY(target))
-	SetUnitFlyHeight(target, z - GetLocationZ(GetTerrainZ_location), 0);
+	SetUnitFlyHeight(target, z - GetLocationZ(GetTerrainZ_location), 0)
 end
 
 ---@param h real максимальная высота в прыжке на середине расстояния (x = d / 2)
@@ -91,6 +91,20 @@ end
 
 ---@param xa real
 ---@param ya real
+---@param za real
+---@param xb real
+---@param yb real
+---@param zb real
+---@return real
+function DistanceBetweenXYZ(xa, ya, za, xb, yb, zb)
+	local dx = xb - xa
+	local dy = yb - ya
+	local dz = zb - za
+	return math.sqrt(dx * dx + dy * dy + dz * dz)
+end
+
+---@param xa real
+---@param ya real
 ---@param xb real
 ---@param yb real
 ---@return real radian
@@ -101,7 +115,7 @@ end
 ---@param a real radian
 ---@param b real radian
 ---@return real radian
-function AngleDiff(a, b)
+function AngleDifference(a, b)
 	local c---@type real
 	local d---@type real
 	if a > b then
@@ -118,14 +132,11 @@ end
 ---@param a real degrees
 ---@param b real degrees
 ---@return real degrees
-function AngleDifference(a, b)
+function AngleDifferenceDeg(a, b)
+	a, b = math.abs(a, 360), math.abs(b, 360)
 	local x---@type real
-	a = math.abs(a, 360)
-	b = math.abs(b, 360)
 	if (a > b) then
-		x = a
-		a = b
-		b = x
+		a, b = b, a
 	end
 	x = b - 360
 	if (b - a > a - x) then
@@ -134,36 +145,15 @@ function AngleDifference(a, b)
 	return math.abs(a - b)
 end
 
-
---[[
-function DistanceBetweenCoords3D(real x1, real y1, real z1, real x2, real y2, real z2) -> real {
-real dx = x2 - x1;
-real dy = y2 - y1;
-real dz = z2 - z1;
-return SquareRoot(dx*dx + dy*dy + dz*dz);
-}
-
-function GetUnitZ(unit target) -> real {
-return GetTerrainZ(GetUnitX(target), GetUnitY(target)) + GetUnitFlyHeight(target);
-}
-
-
-// https://xgm.guru/p/wc3/perpendicular
-// Находит длину перпендикуляра от отрезка, заданного Xa, Ya, Xb, Yb к точке, заданной Xc, Yc.
-function Perpendicular (real Xa, real Ya, real Xb, real Yb, real Xc, real Yc) -> real {
-return SquareRoot((Xa - Xc) * (Xa - Xc) + (Ya - Yc) * (Ya - Yc)) * Sin(Atan2(Yc-Ya,Xc-Xa) - Atan2(Yb-Ya,Xb-Xa));
-}
-
-/*
-
-
-// Приводит угол в божеский вид
-function AngleNormalize(real angle) -> real {
-if (angle > 360){ angle = angle - 360; }
-if (angle < 0){ angle = 360 + angle; }
-return angle;
-}
-
-}
-}
-]]
+-- Находит длину перпендикуляра от отрезка, заданного xa, ya, xb, yb к точке, заданной xc, yc
+---@author https://xgm.guru/p/wc3/perpendicular
+---@param xa real
+---@param ya real
+---@param xb real
+---@param yb real
+---@param xc real
+---@param yc real
+---@return real
+function Perpendicular (xa, ya, xb, yb, xc, yc)
+	return math.sqrt((xa - xc) * (xa - xc) + (ya - yc) * (ya - yc)) * math.sin(math.atan(yc - ya, xc - xa) - math.atan(yb - ya, xb - xa))
+end

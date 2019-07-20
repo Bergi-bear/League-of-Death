@@ -2,7 +2,7 @@ do
 	local rect---@type rect
 	local item ---@type item
 	
-	local InitGlobals_hook = InitGlobals
+	local InitGlobals_hook = InitGlobals ---@type function
 	function InitGlobals()
 		InitGlobals_hook()
 		rect = Rect(0., 0., 128., 128.)

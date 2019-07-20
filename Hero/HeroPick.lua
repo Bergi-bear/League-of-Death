@@ -1,7 +1,7 @@
 do
-	local InitGlobals_hook = InitGlobals ---@type function
+	local InitGlobalsOrigin = InitGlobals ---@type function
 	function InitGlobals()
-		InitGlobals_hook()
+		InitGlobalsOrigin()
 		
 		local Update---@type function
 		

@@ -1,7 +1,7 @@
 do
-	local InitGlobals_hook = InitGlobals ---@type function
+	local InitGlobalsOrigin = InitGlobals ---@type function
 	function InitGlobals()
-		InitGlobals_hook()
+		InitGlobalsOrigin()
 		
 		local Update---@type function
 		local TipText---@type framehandle
@@ -195,8 +195,7 @@ do
 				--BlzFrameSetVisible(AbilWrap, true)
 			end
 			
-			--{ TODO only for test
-			--PLAYER[id].perk[ABILITY.ShakingBlow.codename][3][2] = 1
+			--{ DEBUG
 			--HeroPerkLearn(player, ABILITY.ShakingBlow.codename, 3, 2)
 			--}
 			

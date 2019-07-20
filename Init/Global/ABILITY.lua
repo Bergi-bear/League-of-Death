@@ -144,9 +144,8 @@ ABILITY = {
 					description = 'Каждый 100-й убитый добавляет единицу основного аттрибута'
 				},
 				[2] = {
-					hide        = true,
-					name        = 'Сила Орды',
-					description = 'Каждый 10-ый удар игнорирует броню'
+					name        = 'Destroyer Skill',
+					description = 'Stuns affected targets'
 				},
 				[3] = {
 					hide        = true,
@@ -161,9 +160,8 @@ ABILITY = {
 					description = 'Увеличивает урон от недостающего HP'
 				},
 				[2] = {
-					hide        = true,
-					name        = 'Кровожадность Орды',
-					description = 'Каждый 20-ый убитый добавляет доп. очки раунда'
+					name        = 'Destroyer Mastery',
+					description = 'Kills enemies with health less than 10%'
 				},
 				[3] = {
 					hide        = true,
@@ -173,9 +171,8 @@ ABILITY = {
 			},
 			[4] = {
 				[1] = {
-					hide        = true,
-					name        = 'Легендарная Особенность Орды',
-					description = 'Увеличивает все бонусы от Особенности Орды вдвое. Требует: Не менее трёх Особенностей Орды'
+					name        = 'Legendary Battle Rush',
+					description = 'Adds Shaking Blow effect at the end of way'
 				}
 			}
 		}

@@ -1,8 +1,22 @@
 do
-	local InitGlobals_hook = InitGlobals ---@type function
+	local InitGlobalsOrigin = InitGlobals ---@type function
 	function InitGlobals()
-		InitGlobals_hook()
+		InitGlobalsOrigin()
 		DUMMY = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), FourCC('dumy'), 0, 0, 0)
+		
+		-- Stun
+		local StunId = FourCC('stun')
+		UnitAddAbility(DUMMY, StunId)
+		local StunAbility = BlzGetUnitAbility(DUMMY, StunId)
+		---@param target unit
+		---@param duration real
+		function DummyCastStun(target, duration)
+			SetUnitX(DUMMY, GetUnitX(target))
+			SetUnitY(DUMMY, GetUnitY(target))
+			BlzSetAbilityRealLevelField(StunAbility, ABILITY_RLF_DURATION_NORMAL, 0, duration)
+			BlzSetAbilityRealLevelField(StunAbility, ABILITY_RLF_DURATION_HERO, 0, duration)
+			IssueTargetOrderById(DUMMY, 852095, target) -- thunderbolt
+		end
 	end
 end
 
@@ -18,24 +32,6 @@ function DummyCast (target, id, x, y)
 			            y == nil and GetUnitY(target) or y
 	            )
 	)
-end
-
-local DummyCastOnUnit_id = FourCC('e000')
----@param caster unit
----@param id integer
----@param level integer
----@param order string
----@param target unit
-function DummyCastOnUnit (caster, id, level, order, target)
-	local dummy = caster == nil
-			and
-			CreateUnit(Player(23), DummyCastOnUnit_id, GetUnitX(target), GetUnitY(target), 0)
-			or
-			CreateUnit(GetOwningPlayer(caster), DummyCastOnUnit_id, GetUnitX(caster), GetUnitY(caster), 0)
-	UnitAddAbility(dummy, id)
-	SetUnitAbilityLevel(dummy, id, level)
-	IssueTargetOrder(dummy, order, target)
-	UnitApplyTimedLife(dummy, BTLF_ID, 1)
 end
 
 ---@param target unit

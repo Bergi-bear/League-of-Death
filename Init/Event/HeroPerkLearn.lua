@@ -3,8 +3,9 @@
 ---@param row integer
 ---@param col integer
 function HeroPerkLearn(player, codename, row, col)
-	local id   = GetPlayerId(player)
-	local hero = PLAYER[id].hero
+	local id                        = GetPlayerId(player)
+	local hero                      = PLAYER[id].hero
+	PLAYER[id].perk[codename][row][col] = 1
 	
 	if codename == ABILITY.Horde.codename then
 		if row == 1 then
