@@ -56,6 +56,8 @@ end
 ---@param target unit
 ---@param z real
 function SetUnitZ(target, z)
+	UnitAddAbility(target , FourCC('Aave'))
+    UnitRemoveAbility(target ,FourCC( 'Aave'))
 	MoveLocation(GetTerrainZ_location, GetUnitX(target), GetUnitY(target))
 	SetUnitFlyHeight(target, z - GetLocationZ(GetTerrainZ_location), 0)
 end

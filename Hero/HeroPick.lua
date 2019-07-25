@@ -233,6 +233,7 @@ do
 				FogMaskEnable(false)
 			end
 			HeroPerkShow(player)
+			HeroPickComplete(player)
 		end
 		
 		local StartTrigger = CreateTrigger()
@@ -275,7 +276,7 @@ do
 			Update(Player(i))
 		end
 		
-		--{ TODO: only for test
+		--{ FIXME DEBUG
 		PLAYER[GetPlayerId(GetLocalPlayer())].attr = 1
 		Start(GetLocalPlayer())
 		--}

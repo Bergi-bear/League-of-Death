@@ -3,7 +3,6 @@ do
 	function InitGlobals()
 		InitGlobalsOrigin()
 		
-		local Update---@type function
 		local TipText---@type framehandle
 		
 		-- GameUI
@@ -48,7 +47,7 @@ do
 				PLAYER[id].perk[ability.codename][row][col] = PLAYER[id].perk[ability.codename][row][col] + 1
 				PLAYER[id].perkPoint                        = math.max(0, PLAYER[id].perkPoint - 1)
 				HeroPerkLearn(player, ability.codename, row, col)
-				Update(player)
+				HeroPerkUpdate(player)
 			elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_ENTER then
 				FrameSetText(TipText, perk.name .. '\n\n' .. perk.description)
 			elseif BlzGetTriggerFrameEvent() == FRAMEEVENT_MOUSE_LEAVE then
@@ -91,7 +90,7 @@ do
 			PerkBtnTexture[i] = {}
 			for j = 1, 10 do
 				Perk[i][j] = BlzCreateFrame('ListBoxWar3', AbilBtn[i], 0, 0)
-				local size = j == 10 and 0.05 or 0.03
+				local size = j == 10 and 0.05 or 0.033
 				BlzFrameSetSize(Perk[i][j], size, size)
 				PerkTexture[i][j] = BlzGetFrameByName('ListBoxBackdrop', 0)
 				BlzFrameSetVisible(Perk[i][j], false)
@@ -107,10 +106,12 @@ do
 				
 				if j == 1 then
 					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOPLEFT, AbilBtn[i], FRAMEPOINT_BOTTOMLEFT, 0, 0)
-				elseif j <= 3 then
-					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_LEFT, Perk[i][j - 1], FRAMEPOINT_RIGHT, 0, 0)
+				elseif j == 2 then
+					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOP, AbilBtn[i], FRAMEPOINT_BOTTOM, 0, 0)
+				elseif j == 3 then
+					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOPRIGHT, AbilBtn[i], FRAMEPOINT_BOTTOMRIGHT, 0, 0)
 				elseif j <= 9 then
-					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOP, Perk[i][j - 3], FRAMEPOINT_BOTTOM, 0, 0)
+					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOP, Perk[i][j - 3], FRAMEPOINT_BOTTOM, 0, 0.001)
 				else
 					BlzFrameSetPoint(Perk[i][j], FRAMEPOINT_TOP, Perk[i][j - 2], FRAMEPOINT_BOTTOM, 0, 0)
 				end
@@ -136,7 +137,7 @@ do
 		BlzFrameSetPoint(TipText, FRAMEPOINT_TOPLEFT, TipTextWrap, FRAMEPOINT_TOPLEFT, TipTextPadding, -TipTextPadding)
 		
 		---@param player player
-		Update = function(player)
+		HeroPerkUpdate = function(player)
 			local id = GetPlayerId(player)
 			
 			FrameSetText(BtnText, PLAYER[id].perkPoint)
@@ -199,7 +200,7 @@ do
 			--HeroPerkLearn(player, ABILITY.ShakingBlow.codename, 3, 2)
 			--}
 			
-			Update(player)
+			HeroPerkUpdate(player)
 		end
 		
 		-- HeroPerkWindowShow
@@ -233,11 +234,14 @@ do
 		end)
 		
 		--{ TEST
-		local V = 0.0
+		local V = 0.03
 		local function change(add)
 			V = V + add
 			ClearTextMessages()
 			print(V)
+			for i = 1, 9 do
+				BlzFrameSetSize(Perk[1][i], V, V)
+			end
 		end
 		--} TEST
 		

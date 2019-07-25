@@ -96,15 +96,14 @@ do
 			if GetPlayerAbilityPerkLevel(player, ability.codename, 3, 2) > 0 then
 				local missile = AddSpecialEffect('Effect/Ability/ShakingBlow/Wave/Wave.mdx', casterX, casterY)
 				BlzSetSpecialEffectScale(missile, 0.5)
-				local x, y        = casterX, casterY
 				local speedInc    = 1200 / (1 / TIMER_PERIOD)
 				local distance    = range * 2
 				local damageGroup = CreateGroup()
 				BlzSetSpecialEffectYaw(missile, angle)
 				BlzSetSpecialEffectHeight(missile, 0)
 				TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
-					x, y     = x + speedInc * cos, y + speedInc * sin
-					distance = distance - speedInc
+					local x, y = GetUnitX(caster) + speedInc * cos, GetUnitY(caster) + speedInc * sin
+					distance   = distance - speedInc
 					
 					if distance <= 0 or not InMapXY(x, y) then
 						DestroyEffect(missile)
@@ -168,7 +167,7 @@ do
 		local spellAngleCos, spellAngleSin = math.cos(spellAngle), math.sin(spellAngle) ---@type real
 		local spellDistance                = DistanceBetweenXY(casterX, casterY, spellX, spellY)
 		
-		--{ DEBUG
+		--{ FIXME DEBUG
 		if false then
 			print('-----------------------')
 			print('channel', isEventChannel)
@@ -176,13 +175,30 @@ do
 			print('effect', isEventEffect)
 			print('endcast', isEventEndCast)
 			print('finish', isEventFinish)
-			print(spellX, spellY)
 		end
 		--}
 		
 		--[[Shaking Blow]] if isEventFinish and spellId == ABILITY.ShakingBlow.id then
 			ABILITY.ShakingBlow.data.Cast(caster, spellAngle, 128)
 		end
+		
+		if isEventEffect and spellId == FourCC('MFal') then
+			-- падение камня босс голем
+			--print("mark")
+			local eff = AddSpecialEffect("Abilities/Spells/NightElf/TrueshotAura/TrueshotAura.mdl", spellX, spellY)
+			
+			BlzSetSpecialEffectScale(eff, 2)
+			
+			TimerStart(CreateTimer(), 2, false, function()
+				BlzSetSpecialEffectZ(eff, -100)
+				local stone = CreateUnit(GetOwningPlayer(caster), FourCC('n002'), spellX, spellY, GetUnitFacing(caster))
+				FallUnit(stone, 40, 500, 1)
+				DestroyEffect(eff)-- сразу не уничтожается, поэтому скрываем
+				--print("fall")
+				DestroyTimer(GetExpiredTimer())
+			end)
+		end
+		
 		
 		--[[Battle Rush]] if isEventEffect and spellId == ABILITY.BattleRush.id then
 			local ability     = ABILITY.BattleRush
@@ -254,22 +270,5 @@ do
 		if isEventEndCast then
 			SpellXY[casterHandleId] = nil
 		end
-		
-		if spellId == 123 then
-			--[|cffffcc00Уровень 1|r]
-			--print("Пытаемся изменить подсказку")
-			--local tips="Наносит урон врагам впереди себя \nУрон: Базовый урон x 2 ("..dability..") \nОбласть поражения: "..rability.."\nПерезарядка: "..abicd.." \nАгр: "..argtip.." \nЗамедление: "..stip.." \nПонижение брони: "..armtip.." \nЛегендарный: "..ltip
-			--local tips = "Наносит урон врагам впереди себя \n|cffffcc00Урон:|r Базовый урон x 2 (|cffffcc00" .. dability .. "|r) \n|cffffcc00Область поражения:|r " .. rability .. "\n|cffffcc00Перезарядка:|r " .. abicd .. " \n|cffffcc00Агр:|r " .. argtip .. " \n|cffffcc00Замедление:|r " .. stip .. " \n|cffffcc00Понижение брони:|r " .. armtip .. " \n|cffffcc00Легендарный:|r " .. ltip
-			
-			--BlzSetAbilityExtendedTooltip(GetSpellAbilityId(), "111", 1)
-			--BlzSetAbilityExtendedTooltip(GetSpellAbilityId(), "222", 2)--  работает на 0 уровне
-			---BlzSetAbilityExtendedTooltip(GetSpellAbilityId(), tips, 0)
-			--call BlzSetAbilityExtendedTooltip( 'ANcl', "Extended", 0 )
-			--print("tips changed")
-			--
-			
-			
-		end
-	
 	end)
 end

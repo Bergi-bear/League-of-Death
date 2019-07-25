@@ -45,3 +45,29 @@ end
 TimerStart(CreateTimer(), 0, false, function()
 	StartWave(1, 10)
 end)
+
+-------------------------
+---
+function MakeUnitFly(target)
+	UnitAddAbility(target, FourCC('Aave'))
+	UnitRemoveAbility(target, FourCC('Aave'))
+end
+
+function FallUnit(target, speed, start, flag)
+	MakeUnitFly(target)
+	SetUnitZ(target, start)
+	local current = start
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		
+		if GetUnitFlyHeight(target) <= 50 then
+			DestroyTimer(GetExpiredTimer())
+			SetUnitFlyHeight(target, 0, 0)
+			if flag == 1 then --  оглушаем и наносим урон
+			end
+		else
+			current = current - speed
+			SetUnitFlyHeight(target, current, 0)
+			--print(current)
+		end
+	end)
+end

@@ -20,7 +20,8 @@ do
 				perkPoint              = 60,
 				perk                   = {},
 				HeroPick_BgModel       = '',
-				HeroPerk_AbilitySelect = 1
+				HeroPerk_AbilitySelect = 1,
+				SwipeCount			   = 0
 			}
 		end
 	end

@@ -118,6 +118,66 @@ ABILITY = {
 			}
 		}
 	},
+	
+	Swipe       = {
+		name        = 'Helix',
+		id          = FourCC('AHel'),
+		iditempass  = FourCC('ICHH'),
+		max         = 5,
+		--дальше идёт копирка функции надо переделать
+		description = 'Shakes the ground causing damage to enemies around',
+		perk        = {
+			[1] = {
+				[1] = {
+					name        = 'Berserk Strenght',
+					description = 'Increases area of damage'
+				},
+				[2] = {
+					name        = 'Destroyer Strenght',
+					description = 'Increases damage by your strenght'
+				},
+				[3] = {
+					name        = 'Champion Strenght',
+					description = 'Slows down affected targets'
+				}
+			},
+			[2] = {
+				[1] = {
+					name        = 'Berserk Skill',
+					description = 'Reduces coldown from each enemy in area of effect'
+				},
+				[2] = {
+					name        = 'Destroyer Skill',
+					description = 'Reduces defence of affected targets'
+				},
+				[3] = {
+					name        = 'Champion Skill',
+					description = 'Reduces attack of affected targets'
+				}
+			},
+			[3] = {
+				[1] = {
+					name        = 'Berserk Mastery',
+					description = 'Deals more damage to enemies closer to center'
+				},
+				[2] = {
+					name        = 'Destroyer Mastery',
+					description = 'Becomes target spell. Deals extra damage along line in direction of target'
+				},
+				[3] = {
+					name        = 'Champion Mastery',
+					description = 'Provokes affected enemies to attack you'
+				}
+			},
+			[4] = {
+				[1] = {
+					name        = 'Legendary Shaking Blow',
+					description = 'Херачит землетрясение'
+				}
+			}
+		}
+	},
+	
 	BattleRush  = {
 		name        = 'Battle Rush',
 		id          = FourCC('ABRu'),
