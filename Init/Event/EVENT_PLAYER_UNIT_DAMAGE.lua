@@ -5,8 +5,8 @@ do
 		TriggerRegisterPlayerUnitEvent(DamageTrigger, Player(i), EVENT_PLAYER_UNIT_DAMAGED) -- После вычета брони
 	end
 	TriggerAddAction(DamageTrigger, function()
-		local damage          = GetEventDamage() -- число урона
-		local damageType      = BlzGetEventDamageType()
+		local damage     = GetEventDamage() -- число урона
+		local damageType = BlzGetEventDamageType()
 		if damage < 1 then return end
 		
 		local eventId         = GetHandleId(GetTriggerEventId())
@@ -27,25 +27,26 @@ do
 		
 		if isEventDamaged then
 			local data---@type table
-			local item---@type item
-			local level ---@type integer
 			
 			if IsUnitType(target, UNIT_TYPE_HERO) then
-				--Исцеляющий щит
-				data        = ITEM.ShieldOfHeal
-				item, level = GetInventoryItemById(target, data.id)
-				if item ~= nil and GetUnitAbilityLevel(target, data.cd) == 0 then
-					StartItemCooldown(item, target, data.cd, data.cooldown - level)
-					Heal(target, target, level * data.heal, true)
+				for i = 0, bj_MAX_INVENTORY do
+					local item = UnitItemInSlot(target, i)
+					if item ~= nil then
+						local level = GetItemLevel(item)
+						data        = ITEM.ShieldOfHeal
+						if item ~= nil and GetUnitAbilityLevel(target, data.cd) == 0 then
+							StartItemCooldown(item, target, data.cd, data.cooldown - level)
+							Heal(target, target, level * data.heal, true)
+						end
+					end
 				end
 			end
 			
 			if IsUnitType(caster, UNIT_TYPE_HERO) then
 				for i = 0, bj_MAX_INVENTORY do
-					item  = UnitItemInSlot(caster, i)
-					level = GetItemLevel(caster)
-					
+					local item = UnitItemInSlot(caster, i)
 					if item ~= nil then
+						local level = GetItemLevel(item)
 						if damageType == DAMAGE_TYPE_NORMAL then
 							data = ITEM.MaskOfDeath
 							if GetItemTypeId(item) == data.id then
@@ -71,6 +72,7 @@ do
 				data = ABILITY.Swipe
 				if damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, data.id) > 0 then
 					local id              = GetPlayerId(GetOwningPlayer(caster))
+					
 					PLAYER[id].SwipeCount = PLAYER[id].SwipeCount + 1
 					AddItemToStock(caster, data.iditempass, PLAYER[id].SwipeCount, PLAYER[id].SwipeCount)
 					if PLAYER[id].SwipeCount >= data.max then
