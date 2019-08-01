@@ -1,21 +1,21 @@
 do
 	local DamageTrigger = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
-		local player = Player(i)
-		TriggerRegisterPlayerUnitEvent(DamageTrigger, player, EVENT_PLAYER_UNIT_DAMAGING)
-		TriggerRegisterPlayerUnitEvent(DamageTrigger, player, EVENT_PLAYER_UNIT_DAMAGED)
+		TriggerRegisterPlayerUnitEvent(DamageTrigger, Player(i), EVENT_PLAYER_UNIT_DAMAGING) -- До вычета брони
+		TriggerRegisterPlayerUnitEvent(DamageTrigger, Player(i), EVENT_PLAYER_UNIT_DAMAGED) -- После вычета брони
 	end
-	TriggerAddCondition(DamageTrigger, Condition(function() return GetEventDamage() >= 1 end))
 	TriggerAddAction(DamageTrigger, function()
+		local damage          = GetEventDamage() -- число урона
+		local damageType      = BlzGetEventDamageType()
+		if damage < 1 then return end
+		
 		local eventId         = GetHandleId(GetTriggerEventId())
-		local isEventDamaging = eventId == GetHandleId(EVENT_PLAYER_UNIT_DAMAGING) -- До вычета брони
-		local isEventDamaged  = eventId == GetHandleId(EVENT_PLAYER_UNIT_DAMAGED) -- После вычета брони
+		local isEventDamaging = eventId == GetHandleId(EVENT_PLAYER_UNIT_DAMAGING)
+		local isEventDamaged  = eventId == GetHandleId(EVENT_PLAYER_UNIT_DAMAGED)
 		
 		local target          = GetTriggerUnit() -- тот кто получил урон
 		local caster          = GetEventDamageSource() -- тот кто нанёс урон
 		local casterOwner     = GetOwningPlayer(caster)
-		local damage          = GetEventDamage() -- число урона
-		local damageType      = BlzGetEventDamageType()
 		
 		--{ FIXME DEBUG
 		if false then
@@ -41,30 +41,29 @@ do
 			end
 			
 			if IsUnitType(caster, UNIT_TYPE_HERO) then
-				-- Маска смерти
-				data        = ITEM.MaskOfDeath
-				item, level = GetInventoryItemById(caster, data.id)
-				if item ~= nil and damageType == DAMAGE_TYPE_NORMAL then
+				for i = 0, bj_MAX_INVENTORY do
+					item  = UnitItemInSlot(caster, i)
+					level = GetItemLevel(caster)
 					
-					if level <= 3 then
-						Heal(caster, caster, level * data.heal, true)
-					else
-						Heal(caster, caster, 60 + damage * .15, true)
-					end
-				end
-				
-				-- Башер
-				data = ITEM.Basher
-				item = GetInventoryItemById(caster, data.id)
-				if item ~= nil and damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, data.cd) == 0 then
-					SetItemCharges(item, GetItemCharges(item) + 1)
-					if GetItemCharges(item) >= 5 then
-						SetItemCharges(item, 0)
-						damage = damage * 2
-						BlzSetEventDamage(damage)
-						StartItemCooldown(item, caster, data.cd, 10)
-						FlyTextTagCriticalStrike(target, math.ceil(damage) .. '!')
-						DummyCastStun(target, 2)
+					if item ~= nil then
+						if damageType == DAMAGE_TYPE_NORMAL then
+							data = ITEM.MaskOfDeath
+							if GetItemTypeId(item) == data.id then
+								Heal(caster, caster, level <= 3 and level * data.heal or 60 + damage * 0.15, true)
+							end
+							data = ITEM.Basher
+							if GetItemTypeId(item) == data.id and GetUnitAbilityLevel(caster, data.cd) == 0 then
+								SetItemCharges(item, GetItemCharges(item) + 1)
+								if GetItemCharges(item) >= 5 then
+									SetItemCharges(item, 0)
+									damage = damage * 2
+									BlzSetEventDamage(damage)
+									StartItemCooldown(item, caster, data.cd, 10)
+									FlyTextTagCriticalStrike(target, math.ceil(damage) .. '!')
+									DummyCastStun(target, 2)
+								end
+							end
+						end
 					end
 				end
 				

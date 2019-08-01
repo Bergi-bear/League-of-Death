@@ -56,8 +56,8 @@ end
 ---@param target unit
 ---@param z real
 function SetUnitZ(target, z)
-	UnitAddAbility(target , FourCC('Aave'))
-    UnitRemoveAbility(target ,FourCC( 'Aave'))
+	UnitAddAbility(target, FourCC('Aave'))
+	UnitRemoveAbility(target, FourCC('Aave'))
 	MoveLocation(GetTerrainZ_location, GetUnitX(target), GetUnitY(target))
 	SetUnitFlyHeight(target, z - GetLocationZ(GetTerrainZ_location), 0)
 end
@@ -76,7 +76,7 @@ end
 ---@param d real общее расстояние до цели
 ---@param x real расстояние от исходной цели до точки
 ---@return real
-function ParabolaZ2(zs, ze, h, d, x)
+function GetParabolaZ(zs, ze, h, d, x)
 	return (2 * (zs + ze - 2 * h) * (x / d - 1) + (ze - zs)) * (x / d) + zs
 end
 
@@ -122,10 +122,10 @@ function AngleDifference(a, b)
 	local d---@type real
 	if a > b then
 		c = a - b
-		d = b - a + 2 * bj_PI
+		d = b - a + 2 * math.pi
 	else
 		c = b - a
-		d = a - b + 2 * bj_PI
+		d = a - b + 2 * math.pi
 	end
 	return c > d and d or c
 end

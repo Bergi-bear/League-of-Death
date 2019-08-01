@@ -87,7 +87,8 @@ do
 	end
 	
 	---@param player player
-	function ItemBonusUpdate(player)
+	---@param exclude item
+	function ItemBonusUpdate(player, exclude)
 		local id   = GetPlayerId(player)
 		local hero = PLAYER[id].hero
 		if hero == nil then return end
@@ -96,29 +97,32 @@ do
 		local Agi, AgiOriginal = 0, GetHeroAgi(hero, false)
 		local Int, IntOriginal = 0, GetHeroInt(hero, false)
 		
-		--
-		local data             = ITEM.GauntletOfStr
-		local item, level      = GetInventoryItemById(hero, data.id)
-		if item ~= nil then
-			Str = Str + level * data.str
-			if level >= 4 then Str = Str + StrOriginal * (level == 4 and 0.1 or 0.2) end
-			SetItemDescriptionAll(item, string.gsuber({ str = Str }, GetItemDescriptionOriginal(item)))
-		end
-		--
-		data        = ITEM.SlippersOfAgi
-		item, level = GetInventoryItemById(hero, data.id)
-		if item ~= nil then
-			Agi = Agi + level * data.agi
-			if level >= 4 then Agi = Agi + AgiOriginal * (level == 4 and 0.1 or 0.2) end
-			SetItemDescriptionAll(item, string.gsuber({ agi = Agi }, GetItemDescriptionOriginal(item)))
-		end
-		--
-		data        = ITEM.CloakOfInt
-		item, level = GetInventoryItemById(hero, data.id)
-		if item ~= nil then
-			Int = Int + level * data.int
-			if level >= 4 then Int = Int + IntOriginal * (level == 4 and 0.1 or 0.2) end
-			SetItemDescriptionAll(item, string.gsuber({ int = Int }, GetItemDescriptionOriginal(item)))
+		for i = 0, bj_MAX_INVENTORY do
+			local item = UnitItemInSlot(hero, i)
+			local data---@type table
+			if item ~= nil and exclude ~= item then
+				local level = GetItemLevel(item)
+				
+				data        = ITEM.GauntletOfStr
+				if GetItemTypeId(item) == data.id then
+					Str = Str + level * data.str
+					if level >= 4 then Str = Str + StrOriginal * (level == 4 and 0.1 or 0.2) end
+					SetItemDescriptionAll(item, string.gsuber({ str = Str }, GetItemDescriptionOriginal(item)))
+				end
+				data = ITEM.SlippersOfAgi
+				if GetItemTypeId(item) == data.id then
+					Agi = Agi + level * data.agi
+					if level >= 4 then Agi = Agi + AgiOriginal * (level == 4 and 0.1 or 0.2) end
+					SetItemDescriptionAll(item, string.gsuber({ agi = Agi }, GetItemDescriptionOriginal(item)))
+				end
+				data = ITEM.CloakOfInt
+				if GetItemTypeId(item) == data.id then
+					Int = Int + level * data.int
+					if level >= 4 then Int = Int + IntOriginal * (level == 4 and 0.1 or 0.2) end
+					SetItemDescriptionAll(item, string.gsuber({ int = Int }, GetItemDescriptionOriginal(item)))
+				end
+			
+			end
 		end
 		
 		UnitSetBonus(hero, 1, Str)
@@ -219,11 +223,12 @@ do
 					end
 				end
 			end
+			
+			ItemBonusUpdate(player)
 		end
 		
-		-- обновляем предметы
-		if isEventPickUp or isEventDrop then
-			ItemBonusUpdate(player)
+		if isEventDrop then
+			ItemBonusUpdate(player, item)
 		end
 	end)
 end

@@ -238,7 +238,7 @@ do
 							targetX, targetY  = GetUnitX(target), GetUnitY(target)
 							
 							local targetAngle = AngleBetweenXY(casterX, casterY, targetX, targetY)
-							if DistanceBetweenXY(casterX, casterY, targetX, targetY) <= 256 and AngleDifference(spellAngle, targetAngle) < bj_PI then
+							if DistanceBetweenXY(casterX, casterY, targetX, targetY) <= 256 and AngleDifference(spellAngle, targetAngle) < math.pi then
 								SetUnitX(target, targetX + speedInc * math.cos(targetAngle))
 								SetUnitY(target, targetY + speedInc * math.sin(targetAngle))
 							end
