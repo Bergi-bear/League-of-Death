@@ -42,7 +42,7 @@ do
 				end
 			end
 			
-			if IsUnitType(caster, UNIT_TYPE_HERO) then
+			if IsUnitType(caster, UNIT_TYPE_HERO) then -- маска смерти
 				for i = 0, bj_MAX_INVENTORY do
 					local item = UnitItemInSlot(caster, i)
 					if item ~= nil then
@@ -68,18 +68,36 @@ do
 					end
 				end
 				
-				--Крутилка
+				--Гневный удар
 				data = ABILITY.Swipe
 				if damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, data.id) > 0 then
+					local ability     = data
+					--local normalbat
 					local id              = GetPlayerId(GetOwningPlayer(caster))
 					
 					PLAYER[id].SwipeCount = PLAYER[id].SwipeCount + 1
 					AddItemToStock(caster, data.iditempass, PLAYER[id].SwipeCount, PLAYER[id].SwipeCount)
-					if PLAYER[id].SwipeCount >= data.max then
+
+					if PLAYER[id].SwipeCount == data.max-1 and true then-- двойная атака, подготовка -- перк двойно атаки
+						--normalbat=BlzGetUnitAttackCooldown(caster,0)
+						BlzSetUnitAttackCooldown(caster,0.3,0)
+						--print("nb= "..normalbat)
+					end
+
+
+					if PLAYER[id].SwipeCount >= data.max then--это момент удара
+						--print("nset= "..normalbat) -- тут уже получается 0
+						if true then -- перк двойно атаки
+							BlzSetUnitAttackCooldown(caster, 1.77,0)
+						end
+
+						damage = damage * 2
+						BlzSetEventDamage(damage)
 						PLAYER[id].SwipeCount = 0
 						AddItemToStock(caster, data.iditempass, 0, 0)
-						SetUnitAnimation(caster, 'attack walk stand spin')
-						GroupEnumUnitsInRange(GROUP_ENUM_ONCE, GetUnitX(caster), GetUnitY(caster), 200, nil)
+						--SetUnitAnimation(caster, 'attack walk stand spin')
+						if false then-- перкс сплеша
+						GroupEnumUnitsInRange(GROUP_ENUM_ONCE, GetUnitX(target), GetUnitY(target), 200, nil)
 						while true do
 							local e = FirstOfGroup(GROUP_ENUM_ONCE)
 							if e == nil then break end
@@ -88,10 +106,7 @@ do
 							end
 							GroupRemoveUnit(GROUP_ENUM_ONCE, e)
 						end
-						TimerStart(CreateTimer(), 0.3, false, function()
-							SetUnitAnimation(caster, 'stand')
-							DestroyTimer(GetExpiredTimer())
-						end)
+						end
 					end
 				end
 			end

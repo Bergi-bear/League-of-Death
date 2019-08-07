@@ -24,3 +24,5 @@ end
 function AddSpecialEffectTargetOnce(modelName, targetWidget, attachPointName)
 	DestroyEffect(AddSpecialEffectTarget(modelName, targetWidget, attachPointName))
 end
+CreateUnit(2,2,333,11,0)
+AddSpecialEffectTargetOnce("",eeee,"")

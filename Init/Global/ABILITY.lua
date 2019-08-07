@@ -119,11 +119,11 @@ ABILITY = {
 		}
 	},
 	
-	Swipe       = {
+	Swipe       = { -- гневный удар, D
 		name        = 'Helix',
 		id          = FourCC('AHel'),
 		iditempass  = FourCC('ICHH'),
-		max         = 5,
+		max         = 10,
 		--дальше идёт копирка функции надо переделать
 		description = 'Shakes the ground causing damage to enemies around',
 		perk        = {
