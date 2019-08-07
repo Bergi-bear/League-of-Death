@@ -120,7 +120,7 @@ ABILITY = {
 	},
 	
 	Swipe       = { -- гневный удар, D
-		name        = 'Helix',
+		name        = 'Swipe',
 		id          = FourCC('AHel'),
 		iditempass  = FourCC('ICHH'),
 		max         = 10,

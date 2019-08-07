@@ -21,7 +21,8 @@ do
 				perk                   = {},
 				HeroPick_BgModel       = '',
 				HeroPerk_AbilitySelect = 1,
-				SwipeCount			   = 0
+				SwipeCount			   = 0,
+				SwipeKilledCount 	   = 0
 			}
 		end
 	end
