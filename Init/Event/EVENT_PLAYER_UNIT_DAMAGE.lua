@@ -43,7 +43,6 @@ do
 			end
 			
 			if IsUnitType(caster, UNIT_TYPE_HERO) then
-				-- TODO необходимо переместить способность после всех просчётов дамага для достижения максимального вампиризма у значения damage
 				for i = 0, bj_MAX_INVENTORY do
 					local item = UnitItemInSlot(caster, i)
 					if item ~= nil then
@@ -51,6 +50,7 @@ do
 						local itemLevel = GetItemLevel(item)
 						
 						if damageType == DAMAGE_TYPE_NORMAL then
+							-- TODO необходимо переместить способность после всех просчётов дамага для достижения максимального вампиризма у значения damage
 							local data = ITEM.MaskOfDeath
 							if itemId == data.id then
 								Heal(caster, caster, itemLevel <= 3 and itemLevel * data.heal or 60 + damage * 0.15, true)
