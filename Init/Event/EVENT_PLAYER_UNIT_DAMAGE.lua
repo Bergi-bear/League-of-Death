@@ -65,6 +65,7 @@ do
 									BlzSetEventDamage(damage)
 									StartItemCooldown(item, caster, data.cd, 10)
 									FlyTextTagCriticalStrike(target, math.ceil(damage) .. '!')
+                                    -- TODO не рекомендуюся использовать, проиходит наложение текста
 									DummyCastStun(target, 2)
 								end
 							end
@@ -137,8 +138,19 @@ do
 						end
 					end
 				end
-				if  damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, FourCC('A000')) > 0 then
-					UnitStartAbilityCooldown(caster,FourCC('A000'),1)
+				--local id = GetPlayerId(GetOwningPlayer(caster))
+				--local current=PLAYER[id].RealCDonStomp
+--[[Уменьшение кд]]	if  damageType == DAMAGE_TYPE_NORMAL then-- and (GetUnitAbilityLevel(caster, FourCC('A000')) or true)> 0 then
+					local id = GetPlayerId(GetOwningPlayer(caster))
+					local current=PLAYER[id].RealCDonStomp
+					print("current="..current)
+					if current>0 then
+						PLAYER[id].RealCDonStomp=PLAYER[id].RealCDonStomp-1
+						UnitStartAbilityCooldown(caster,FourCC('A000'),PLAYER[id].RealCDonStomp)
+					else
+						print("errortoreload "..current)
+					end
+
 				end
 			end
 			

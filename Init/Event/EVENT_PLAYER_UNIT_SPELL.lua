@@ -265,6 +265,21 @@ do
 				SetUnitY(caster, casterY)
 			end)
 		end
+		--todo добавить способность в общаю таблицу
+		if isEventEffect and spellId == FourCC('A000') then -- Топот лошади
+			local id = GetPlayerId(GetOwningPlayer(caster))
+			PLAYER[id].RealCDonStomp=BlzGetAbilityCooldown(FourCC('A000'),0)
+
+			TimerStart(CreateTimer(), 1, true, function()
+				PLAYER[id].RealCDonStomp=PLAYER[id].RealCDonStomp-1
+				if PLAYER[id].RealCDonStomp<=0 then
+					--fixme pausetimer?? паузить ли перед удалением?
+					DestroyTimer(GetExpiredTimer())
+				end
+			end)
+			--BlzGetUnitAbilityCooldownRemaining
+
+		end
 		
 		-- Clear Data
 		if isEventEndCast then
