@@ -140,6 +140,7 @@ do
 				end
 				--local id = GetPlayerId(GetOwningPlayer(caster))
 				--local current=PLAYER[id].RealCDonStomp
+				--fixme много дебага и надо запретить условие чтобы где попало не выполнялся
 --[[Уменьшение кд]]	if  damageType == DAMAGE_TYPE_NORMAL then-- and (GetUnitAbilityLevel(caster, FourCC('A000')) or true)> 0 then
 					local id = GetPlayerId(GetOwningPlayer(caster))
 					local current=PLAYER[id].RealCDonStomp
