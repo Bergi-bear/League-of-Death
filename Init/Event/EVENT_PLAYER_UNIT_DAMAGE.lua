@@ -132,6 +132,9 @@ do
 						end
 					end
 				end
+				if  damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, FourCC('A000')) > 0 then
+					UnitStartAbilityCooldown(caster,FourCC('A000'),1)
+				end
 			end
 			
 			-- Показыввем урон

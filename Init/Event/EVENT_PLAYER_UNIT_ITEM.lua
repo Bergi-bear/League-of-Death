@@ -63,6 +63,31 @@ do
 				DestroyTimer(GetExpiredTimer())
 			end)
 		end
+
+		function UnitStartAbilityCooldown(unit, abilid, duration)
+			if GetUnitAbilityLevel(unit,abilid)<1 then -- нет способности
+				print("способность уже на перезарядке или её нет")
+			end
+			UnitRemoveAbility(unit, abilid)
+			UnitRemoveAbility(unit, FourCC('ACD1'))
+			UnitAddAbility(unit,FourCC('ACD1'))
+
+			--BlzSetUnitAbilityCooldown(unit, FourCC('ACD1'), 0, duration)
+			TriggerSleepAction(0.1)
+			--выставляем все параметры для подменяемой способности
+			DummyCastStun(unit,1)
+			--SetUnitX(dummy, GetUnitX(unit))
+			--SetUnitY(dummy, GetUnitY(unit))
+			--SetUnitOwner(dummy, Player(PLAYER_NEUTRAL_AGGRESSIVE), false)
+			--IssueTargetOrderById(dummy, 852252, unit) -- creepthunderbolt
+			--SetUnitOwner(dummy, Player(PLAYER_NEUTRAL_PASSIVE), false)
+
+			TimerStart(CreateTimer(), duration, false, function()
+				UnitRemoveAbility(unit, FourCC('ACD1'))
+				UnitAddAbility(unit,abilid)
+				DestroyTimer(GetExpiredTimer())
+			end)
+		end
 	end
 	
 	---@param whichUnit unit
