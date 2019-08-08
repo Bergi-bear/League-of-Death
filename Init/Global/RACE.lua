@@ -10,7 +10,9 @@ RACE = {
 				ability     = {
 					ABILITY.ShakingBlow,
 					ABILITY.BattleRush,
+					ABILITY.Swipe,
 					ABILITY.Horde
+
 				}
 			},
 			{

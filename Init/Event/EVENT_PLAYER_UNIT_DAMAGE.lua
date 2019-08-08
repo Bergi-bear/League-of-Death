@@ -72,42 +72,54 @@ do
 				--Гневный удар
 				data = ABILITY.Swipe
 				if damageType == DAMAGE_TYPE_NORMAL and GetUnitAbilityLevel(caster, data.id) > 0 then
-					--local ability     = data
-					--local normalbat
+					local ability     = data
+					local legendarymax=GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 4, 1) > 0 and data.max/2 or 0
+					local isdouble       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 1, 1) > 0
+					local is3pecent       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 1, 2) > 0
+					local isstr       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 1, 3) > 0
+					local ismissinghp       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 2, 1) > 0
+					local issplash       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 2, 2) > 0
+					local isbash       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 2, 3) > 0
+					local isspeed       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 3, 1) > 0
+					local iskilled       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 3, 2) > 0
+					local isdisarm       = GetPlayerAbilityPerkLevel(casterOwner, ability.codename, 3, 3) > 0
+
+
+					-------------------------юху
 					local id= GetPlayerId(GetOwningPlayer(caster))
-					local legendarymax=0
+
 					PLAYER[id].SwipeCount = PLAYER[id].SwipeCount + 1
 					AddItemToStock(caster, data.iditempass, PLAYER[id].SwipeCount, PLAYER[id].SwipeCount)
-					if true then legendarymax=data.max/2 end-- легендарный перк
-					if true and PLAYER[id].SwipeCount == data.max-legendarymax-1 then BlzSetUnitAttackCooldown(caster,0.3,0) end -- двойная атака, подготовка -- перк двойно атаки
+					--if true then legendarymax=data.max/2 end-- легендарный перк
+					if isdouble and PLAYER[id].SwipeCount == data.max-legendarymax-1 then BlzSetUnitAttackCooldown(caster,0.3,0) end -- двойная атака, подготовка -- перк двойно атаки
 
 
 
 					if PLAYER[id].SwipeCount >= data.max-legendarymax then--это момент удара
 						--print("nset= "..normalbat) -- тут уже получается 0
-						if true then BlzSetUnitAttackCooldown(caster, 1.77,0) end -- перк двойно атаки я ленивый, не написал в Player
+						if isdouble then BlzSetUnitAttackCooldown(caster, 1.77,0) end -- перк двойно атаки я ленивый 1.77, не написал в Player
 
 						damage = damage * 2--обычное выставление дамага
 
-						if true then damage=damage+GetHeroStr(caster,true) end-- perk допдамага от силы
-						if true then damage=damage+GetUnitState(target,UNIT_STATE_MAX_LIFE)*.03 end-- perk допдамага От макс хп врага
-						if true then damage=damage*(1+(1-GetUnitState(caster,UNIT_STATE_LIFE)/GetUnitState(caster,UNIT_STATE_MAX_LIFE))) end -- перк увеличивающий за процент потерянного хп
-						if true then DummyCastStun(target, 1) end-- перк секундного стана
-						if true then damage=damage+PLAYER[id].SwipeKilledCount end-- перк бонуса урона способности после убийств
-						if true then
+						if isstr then damage=damage+GetHeroStr(caster,true) end-- perk допдамага от силы
+						if is3pecent then damage=damage+GetUnitState(target,UNIT_STATE_MAX_LIFE)*.03 end-- perk допдамага От макс хп врага
+						if ismissinghp then damage=damage*(1+(1-GetUnitState(caster,UNIT_STATE_LIFE)/GetUnitState(caster,UNIT_STATE_MAX_LIFE))) end -- перк увеличивающий урон за процент потерянного хп
+						if isbash then DummyCastStun(target, 1) end-- перк секундного стана
+						if iskilled then damage=damage+PLAYER[id].SwipeKilledCount end-- перк бонуса урона способности после убийств
+						if isdisarm then -- разоружение на 5 секунд
 								UnitAddAbility(target,FourCC('Abun'))
 							TimerStart(CreateTimer(), 5, false, function()
 								UnitRemoveAbility(target,FourCC('Abun'))
 								DestroyTimer(GetExpiredTimer())
 							end)
-						end -- разоружение на 5 секунд
-						if true then UnitAddItem(caster,CreateItem(FourCC('IDCS'),0,0)) end-- ускорение, но нужно переделать на убийство
+						end
+						if isspeed then UnitAddItem(caster,CreateItem(FourCC('IDCS'),0,0)) end-- ускорение, но нужно переделать на убийство
 
 							BlzSetEventDamage(damage)
 						PLAYER[id].SwipeCount = 0
 						AddItemToStock(caster, data.iditempass, 0, 0)
 						--SetUnitAnimation(caster, 'attack walk stand spin')
-						if true then-- перкс сплеша
+						if issplash then-- перкс сплеша
 						GroupEnumUnitsInRange(GROUP_ENUM_ONCE, GetUnitX(target), GetUnitY(target), 150, nil)
 						while true do
 							local e = FirstOfGroup(GROUP_ENUM_ONCE)

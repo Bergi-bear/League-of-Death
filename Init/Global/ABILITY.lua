@@ -125,54 +125,54 @@ ABILITY = {
 		iditempass  = FourCC('ICHH'),
 		max         = 10,
 		--дальше идёт копирка функции надо переделать
-		description = 'Shakes the ground causing damage to enemies around',
+		description = 'Every 10-th attack causes additional damage',
 		perk        = {
 			[1] = {
 				[1] = {
 					name        = 'Berserk Strenght',
-					description = 'Increases area of damage'
+					description = 'Makes double attack immediately'
 				},
 				[2] = {
 					name        = 'Destroyer Strenght',
-					description = 'Increases damage by your strenght'
+					description = 'Deals additional damage 3% of maximum target`s health '
 				},
 				[3] = {
 					name        = 'Champion Strenght',
-					description = 'Slows down affected targets'
+					description = 'Adds your strenght to damage'
 				}
 			},
 			[2] = {
 				[1] = {
 					name        = 'Berserk Skill',
-					description = 'Reduces coldown from each enemy in area of effect'
+					description = 'Increases damage from each missing health point'
 				},
 				[2] = {
 					name        = 'Destroyer Skill',
-					description = 'Reduces defence of affected targets'
+					description = 'Adds 100% splash attack to swipe'
 				},
 				[3] = {
 					name        = 'Champion Skill',
-					description = 'Reduces attack of affected targets'
+					description = 'Stuns affected target for 1 sec'
 				}
 			},
 			[3] = {
 				[1] = {
 					name        = 'Berserk Mastery',
-					description = 'Deals more damage to enemies closer to center'
+					description = 'Increase move speed to max if target is dying'
 				},
 				[2] = {
 					name        = 'Destroyer Mastery',
-					description = 'Becomes target spell. Deals extra damage along line in direction of target'
+					description = 'Increases damage by killed enemies'
 				},
 				[3] = {
 					name        = 'Champion Mastery',
-					description = 'Provokes affected enemies to attack you'
+					description = 'Knocks target`s weapons'
 				}
 			},
 			[4] = {
 				[1] = {
 					name        = 'Legendary Shaking Blow',
-					description = 'Херачит землетрясение'
+					description = 'Reduces twice attack count to activate swipe		'
 				}
 			}
 		}
