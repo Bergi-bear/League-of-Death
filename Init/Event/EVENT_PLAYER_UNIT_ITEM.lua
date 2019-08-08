@@ -58,7 +58,7 @@ do
 			IssueTargetOrderById(dummy, 852252, target) -- creepthunderbolt
 			SetUnitOwner(dummy, Player(PLAYER_NEUTRAL_PASSIVE), false)
 			BlzSetUnitAbilityCooldown(target, ability, 0, duration)
-			TimerStart(CreateTimer(), duration, false, function()
+			TimerStart(CreateTimer(), duration - 0.01, false, function()
 				BlzItemRemoveAbility(item, ability)
 				DestroyTimer(GetExpiredTimer())
 			end)
