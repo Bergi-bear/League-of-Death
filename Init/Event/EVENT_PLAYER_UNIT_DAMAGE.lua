@@ -140,16 +140,16 @@ do
 				end
 				--local id = GetPlayerId(GetOwningPlayer(caster))
 				--local current=PLAYER[id].RealCDonStomp
-				--fixme много дебага и надо запретить условие чтобы где попало не выполнялся
---[[Уменьшение кд]]	if  damageType == DAMAGE_TYPE_NORMAL then-- and (GetUnitAbilityLevel(caster, FourCC('A000')) or true)> 0 then
+				--fixme по идее условием должно быть наличие перка, но перка ещё нет
+--[[Уменьшение кд]]	if  damageType == DAMAGE_TYPE_NORMAL and GetUnitTypeId(caster)==FourCC('H001') then
 					local id = GetPlayerId(GetOwningPlayer(caster))
 					local current=PLAYER[id].RealCDonStomp
-					print("current="..current)
+					--print("current="..current)
 					if current>0 then
 						PLAYER[id].RealCDonStomp=PLAYER[id].RealCDonStomp-1
 						UnitStartAbilityCooldown(caster,FourCC('A000'),PLAYER[id].RealCDonStomp)
 					else
-						print("errortoreload "..current)
+						--print("errortoreload "..current)
 					end
 
 				end

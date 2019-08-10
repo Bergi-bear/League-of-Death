@@ -103,10 +103,10 @@ do
 				k=k+1
 				--print("k="..k)
 				if k>=duration then
-					if GetUnitAbilityLevel(unit,abilid)==0 then
+					if GetUnitAbilityLevel(unit,abilid)==0 and k<=2 then
 						UnitRemoveAbility(unit, reloadcode)
 						UnitAddAbility(unit,abilid)
-						print("reloadisready")
+						print("reloadisready "..k)
 					end
 					DestroyTimer(GetExpiredTimer())
 
