@@ -67,18 +67,15 @@ do
 		function UnitStartAbilityCooldown(unit, abilid, duration)
 			local reloadcode=FourCC('ACD1')
 			if GetUnitAbilityLevel(unit,abilid)<1 then -- нет способности
-				print("способность уже на перезарядке или её нет")
+			--	print("способность уже на перезарядке или её нет")
 			end
 			UnitRemoveAbility(unit, abilid)
 			UnitRemoveAbility(unit, reloadcode)
 			UnitAddAbility(unit,reloadcode)
-
+			--BlzSetUnitAbilityManaCost(unit,reloadcode,0,0)--затираем манакост от предыдущей способности-- не сработало, мана всё равно тратиться =(
 			BlzSetUnitAbilityCooldown(unit, reloadcode, 0, duration)
 
-			--выставляем все параметры для подменяемой способности
-			BlzSetAbilityIcon(reloadcode,BlzGetAbilityIcon(abilid))--иконку
-			BlzSetAbilityPosX(reloadcode,BlzGetAbilityPosX(abilid))--x
-			BlzSetAbilityPosY(reloadcode,BlzGetAbilityPosY(abilid))--y
+
 
 			--DummyCastStun(unit,1)
 			SetUnitX(dummy, GetUnitX(unit))
@@ -87,13 +84,29 @@ do
 			IssueTargetOrderById(dummy, 852252, unit) -- creepthunderbolt
 			SetUnitOwner(dummy, Player(PLAYER_NEUTRAL_PASSIVE), false)
 
+			--todo выставляем все параметры для подменяемой способности требуются локальные данные для общего случая
+			BlzSetAbilityIcon(reloadcode,BlzGetAbilityIcon(abilid))--иконку
+			BlzSetAbilityPosX(reloadcode,BlzGetAbilityPosX(abilid))--x
+			BlzSetAbilityPosY(reloadcode,BlzGetAbilityPosY(abilid))--y
+			--todo нужна ещё смена хоткея
+			---
+			BlzSetAbilityTooltip(reloadcode,BlzGetAbilityTooltip(abilid,0),0)
+			BlzSetAbilityExtendedTooltip(reloadcode,BlzGetAbilityExtendedTooltip(abilid,0),0)
+
+			BlzSetUnitAbilityManaCost(unit,reloadcode,0,BlzGetAbilityManaCost(abilid,0))-- полная подмена
+			--Setunitsta
+			SetUnitState(unit,UNIT_STATE_MANA,GetUnitState(unit,UNIT_STATE_MANA)+BlzGetAbilityManaCost(abilid,0))
+
+			local k=0
 			TimerStart(CreateTimer(), 1, true, function()
-				local k=0
+
 				k=k+1
+				--print("k="..k)
 				if k>=duration then
-					if GetUnitAbilityLevel(unit,reloadcode)>0 then
+					if GetUnitAbilityLevel(unit,abilid)==0 then
 						UnitRemoveAbility(unit, reloadcode)
 						UnitAddAbility(unit,abilid)
+						print("reloadisready")
 					end
 					DestroyTimer(GetExpiredTimer())
 
